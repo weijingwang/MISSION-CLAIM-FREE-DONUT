@@ -1,5 +1,6 @@
 import pygame
 import random
+pygame.mixer.pre_init()
 
 pygame.init()
 
@@ -170,7 +171,7 @@ class background():
 
 
 
-		print(self.meters_traveled)
+		# print(self.meters_traveled)
 
 		if self.x<=-1280:
 			self.x=1280
@@ -187,6 +188,15 @@ class background():
 			self.scroll_speed =5
 
 
+class police():
+	"""docstring for police"""
+	def __init__(self):
+		self.x = x
+		self.y = y
+		self.speed = 10
+		
+
+
 
 me = player()
 poop = obstacle()
@@ -196,6 +206,11 @@ background_2 = background(1280,0)
 
 clock = pygame.time.Clock()
 collision = False
+
+pygame.mixer.music.load("national_anthem.mp3")
+#pygame.mixer.music.load("./assets/title.ogg")  
+pygame.mixer.music.play(-1,0.0)
+
 while not done:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
