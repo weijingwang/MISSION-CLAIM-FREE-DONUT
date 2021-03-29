@@ -87,8 +87,8 @@ class obstacle():
 		self.image = pygame.Surface([100, 100])
 		self.image.fill((255, 0, 0))
 		self.rect = self.image.get_rect()
-		self.rect.x = 300
-		self.rect.y = 300
+		self.rect.x = 800
+		self.rect.y = 200
 		self.speed = 20
 
 	def render(self,collision):
