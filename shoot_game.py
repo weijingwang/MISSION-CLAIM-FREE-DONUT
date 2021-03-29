@@ -3,7 +3,7 @@ import random
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 
-shooting_range = pygame.image.load('shooting_range.png').convert_alpha()
+
 
 class target():
 	"""docstring for target"""
@@ -27,7 +27,7 @@ class target():
 
 	def draw_target(self,screen):
 		pygame.draw.rect(screen, self.color, pygame.Rect(self.x, self.y, self.width, self.height))
-		screen.blit(self.image,(self.x,self.y))
+		# screen.blit(self.image,(self.x,self.y))
 
 	def turn_active(self,clicked):
 		self.mouse_pos = pygame.mouse.get_pos()
@@ -105,8 +105,7 @@ while not done:
 		else:
 			clicked == False
 
-	screen.blit(shooting_range,(0,0))
-
+	screen.fill((0,0,0))
 	for x in all_targets:
 		x.draw_target(screen)
 		check_button = x.turn_active(clicked)
