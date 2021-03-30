@@ -203,11 +203,8 @@ class police():
 		self.meters_traveled = -5
 
 		self.images = []
-		# self.images.append(pygame.image.load('police-1.png').convert_alpha())
-		# self.images.append(pygame.image.load('police-2.png').convert_alpha())
-
-		self.images.append(pygame.image.load('player-1.png').convert_alpha())
-		self.images.append(pygame.image.load('player-2.png').convert_alpha())
+		self.images.append(pygame.image.load('police-1.png').convert_alpha())
+		self.images.append(pygame.image.load('police-2.png').convert_alpha())
 		self.index = 0
 		self.image = self.images[self.index]
 
@@ -223,31 +220,23 @@ class police():
 		self.finish_move = True
 		self.move_distance =0
 
-	def chase(self,collision,hits_police):
+	def chase(self,collision,hit_police):
 		# self.meters_traveled+=self.speed/100
 		# print(self.meters_traveled)
 
 		
-		if hits_police == True:
-			self.finish_move=False
-			self.rect[0]-=100
-			
-			self.finish_move=True
-
 
 			
 			# self.finish_move = True
-		# if self.finish_move == False:
+		if self.finish_move == False:
 
-		# 	self.rect[0]-=3
-		# 	self.move_distance +=3
-		# 	if self.move_distance >=100:
-
-		# 		self_finish_move = True
-		# 		self.move_distance=0
-		# 		self.finish_move = True
-		# 		print(self.finish_move)
-		# 		# return self.finish_move
+			self.rect[0]-=5
+			self.move_distance +=5
+			if self.move_distance >=100:
+				self_finish_move = True
+				self.move_distance=0
+				self.finish_move = True
+				# return self.finish_move
 		else:
 			if collision==True:
 				self.rect[0]+=self.speed + 3
@@ -260,15 +249,11 @@ class police():
 			# if self.meters_traveled>=player_meters_traveled:
 			# 	print("lose")
 			
-			if hits_police==True:
+			if hit_police==True:
 				# print(hit_police)
 				self.finish_move = False
 
 		screen.blit(self.image, self.rect)
-
-
-		print(self.finish_move)
-		return self.finish_move
 
 
 
@@ -279,7 +264,7 @@ class police():
 		self.image = self.images[self.index]
 
 	def police_details(self):
-		# print(self.finish_move)
+		print(self.finish_move)
 		return self.finish_move
 
 class text_game():
@@ -316,11 +301,9 @@ class text_game():
 					self.word = random.choice(self.word_list)
 
 					self.hit = True
-
-					if police_finished_move == True:
-						# self.hit = False
-						self.hit = False
-						print(self.hit)
+					# if police_finished_move == True:
+					# 	self.hit = False
+					# 	print(self.hit)
 					# else:
 					# 	self.hit= True
 					# 	print(self.hit)
@@ -379,10 +362,9 @@ def running_game(screen):
 			finish_move = chasers.police_details()
 			hit_police = typing.game(event,finish_move)
 
-
 		# background_1.draw(screen,collision)
 		#  background_2.draw(screen,collision)
-		hit_police = typing.game(event,finish_move)
+		
 		screen.fill((50,50,50))
 
 		city_back2a.draw(screen,collision)
@@ -407,7 +389,6 @@ def running_game(screen):
 
 		chasers.chase(collision,hit_police)
 		chasers.update()
-
 
 		# print(hit_police)
 		typing.draw()
@@ -468,9 +449,6 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit()
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_RETURN:
-					done=True
 
 		x=((1280/2)-(width/2))		
 		y=((720/2)-(height/2))
