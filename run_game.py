@@ -4,7 +4,7 @@ pygame.mixer.pre_init()
 
 pygame.init()
 
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((800, 450))
 
 
 def displayText(surface,message,x,y,size,r,g,b):
@@ -26,19 +26,19 @@ class player():
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
-		self.rect.x = 200
-		self.rect.y = 250
+		self.rect.x = 125
+		self.rect.y = 156
 
 		# self.image.fill((255, 0, 0))
 
-		self.speed_x=20
+		self.speed_x=12
 
 
-		self.floor = 250
+		self.floor = 156
 
 
 		self.jump = False
-		self.speed_y=17
+		self.speed_y=11
 		self.mass = 1
 
 
@@ -92,22 +92,22 @@ class player():
 
 			self.rect[1]-= F
 
-			self.speed_y -=2
+			self.speed_y -=1.25
 
 			if self.speed_y<=0:
 
 				self.mass = -1
 
-			if self.speed_y <=-17:
+			if self.speed_y <=-11:
 
 				self.jump = False
 
-				self.speed_y=17
+				self.speed_y=11
 
 				self.mass=1
 				if collision==True:
 
-					self.rect.y = 451-obstacle_height
+					self.rect.y = 281-obstacle_height
 					# print(self.rect.y)
 					
 				else:
@@ -137,14 +137,14 @@ class obstacle():
 		self.rect = self.image.get_rect()
 		self.rect.x = 800
 		self.rect.y = 450
-		self.speed = 20
+		self.speed = 12.5
 		
 
 
 	def render(self,collision):
 
 		if self.rect[0]<=0:
-			self.rect[0]=1280-+self.rect[2]
+			self.rect[0]=800-+self.rect[2]
 		# print(self.rect)
 		if collision ==True:
 			# self.rect.x+=1
@@ -152,7 +152,7 @@ class obstacle():
 			# print(self.rect[3])
 			return self.rect[3]#height
 		else:
-			self.rect[0] -= 20
+			self.rect[0] -= 12.5
 		screen.blit(self.image, self.rect)
 
 
@@ -178,10 +178,10 @@ class background():
 
 		self.x-=self.scroll_speed
 
-		if self.x<=-1280:
-			self.x=1280
+		if self.x<=-800:
+			self.x=800
 
-		screen.blit(pygame.transform.scale(self.image,(1280,720)),(self.x,self.y))
+		screen.blit(pygame.transform.scale(self.image,(800,450)),(self.x,self.y))
 
 		# screen.blit(pygame.transform.scale(blackTexture, (800, 600)), (0, 0))
 
@@ -204,8 +204,8 @@ class police():
 	"""docstring for police"""
 	def __init__(self):
 
-		self.speed = 0.01
-		self.meters_traveled = -5
+		self.speed = 0.006
+		self.meters_traveled = -3
 
 		self.images = []
 		self.images.append(pygame.image.load('police-1.png'))
@@ -215,9 +215,9 @@ class police():
 
 		self.rect = self.image.get_rect()
 
-		self.rect.x = -200
+		self.rect.x = -125
 
-		self.rect.y = 250
+		self.rect.y = 156
 
 	def chase(self,player_meters_traveled,collision):
 		self.meters_traveled+=self.speed/100
@@ -225,9 +225,9 @@ class police():
 
 		
 		if collision==True:
-			self.rect[0]+=self.speed + 5
+			self.rect[0]+=self.speed + 3
 		else:
-			self.rect[0]+= 0.01
+			self.rect[0]+= 0.006
 
 		# print(self.rect[0])
 		screen.blit(self.image, self.rect)
@@ -266,7 +266,7 @@ class text_game():
 	def draw(self):
 		self.rect = self.txt_surface.get_rect()
 		self.txt_surface = self.font.render(self.text, True, self.color)
-		screen.blit(self.txt_surface, ((1280/2)-self.rect[2]/2, 600))
+		screen.blit(self.txt_surface, ((800/2)-self.rect[2]/2, 600))
 
 
 
@@ -279,13 +279,13 @@ def running_game(screen):
 	poop = obstacle()
 	chasers = police()
 	# background_1 = background(0,0,5)
-	# background_2 = background(1280,0,5)
+	# background_2 = background(800,0,5)
 
 	city_back1a = background(0,0,5,"city_back1.png",False)
-	player_meters_traveled = city_back1b = background(1280,0,5,"city_back1.png",True)
+	player_meters_traveled = city_back1b = background(800,0,5,"city_back1.png",True)
 
 	city_back2a = background(0,0,1,"city_back2.png",False)
-	city_back2b = background(1280,0,1,"city_back2.png",False)
+	city_back2b = background(800,0,1,"city_back2.png",False)
 	grass = background(0,0,20,"grass.png",False)
 
 	typing = text_game()
@@ -369,10 +369,10 @@ cutscene_1text = pygame.image.load("cutscene_1b.png")
 cutscene_2 = pygame.image.load("cutscene_2.png")
 cutscene_3 = pygame.image.load("cutscene_3.png")
 
-width = 1280
-height = 720
+width = 800
+height = 450
 
-text_x = 1280
+text_x = 800
 text_speed = 5
 text_accel = 0.1
 def cutscene(screen,width,height,text_x,text_speed,text_accel):
@@ -390,8 +390,8 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 			if event.type == pygame.QUIT:
 				quit()
 
-		x=((1280/2)-(width/2))		
-		y=((720/2)-(height/2))
+		x=((800/2)-(width/2))		
+		y=((450/2)-(height/2))
 
 
 
@@ -423,5 +423,5 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 		pygame.display.flip()
 
-# cutscene(screen,1280,720,1280,5,0.1)
+# cutscene(screen,800,450,800,5,0.1)
 running_game(screen)
