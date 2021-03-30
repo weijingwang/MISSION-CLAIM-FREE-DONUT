@@ -158,24 +158,21 @@ class obstacle():
 
 class background():
 	"""docstring for backgro"""
-	def __init__(self, x,y):
-		self.images = []
-		self.images.append(pygame.image.load('player-1.png'))
-		self.images.append(pygame.image.load('player-2.png'))
-		self.index = 0
-		self.image = self.images[self.index]
+	def __init__(self, x,y,scroll_speed,image,score_counter):
 
-		self.rect = self.image.get_rect()
+
 
 
 
 		self.x=x
 		self.y=y
-
-		self.scroll_speed = 5
-		self.image =pygame.image.load("background.png")
-
+		self.scroll_speed = scroll_speed
+		self.image =pygame.image.load(image)
+		self.rect = self.image.get_rect()
 		self.meters_traveled = 0
+		self.scroll_speed_bank = scroll_speed
+
+		self.score_counter = score_counter
 		
 	def draw(self,screen,collision):
 		shake_speed = random.randrange(10)
@@ -184,22 +181,21 @@ class background():
 		self.meters_traveled+=self.scroll_speed/100
 
 
-
-		
-
 		if self.x<=-1280:
 			self.x=1280
 
-		screen.blit(self.image,(self.x,self.y))
+		screen.blit(pygame.transform.scale(self.image,(1280,720)),(self.x,self.y))
 
+		# screen.blit(pygame.transform.scale(blackTexture, (800, 600)), (0, 0))
 
-		displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
+		if self.score_counter == True:
+			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
 
 		if collision==True:
 			self.scroll_speed=0
 
 		else:
-			self.scroll_speed =5
+			self.scroll_speed =self.scroll_speed_bank
 
 		# print(self.meters_traveled)
 		return self.meters_traveled
@@ -209,7 +205,7 @@ class police():
 	"""docstring for police"""
 	def __init__(self):
 
-		self.speed = 3
+		self.speed = 0.01
 		self.meters_traveled = -5
 
 		self.images = []
@@ -229,12 +225,10 @@ class police():
 		# print(self.meters_traveled)
 
 		
-
-
 		if collision==True:
-			self.rect[0]+=self.speed
+			self.rect[0]+=self.speed + 5
 		else:
-			self.rect[0]+= 1
+			self.rect[0]+= 0.01
 
 		# print(self.rect[0])
 		screen.blit(self.image, self.rect)
@@ -280,16 +274,20 @@ class text_game():
 
 
 
-
-		
-		
 def running_game(screen):
 
 	me = player()
 	poop = obstacle()
 	chasers = police()
-	background_1 = background(0,0)
-	background_2 = background(1280,0)
+	# background_1 = background(0,0,5)
+	# background_2 = background(1280,0,5)
+
+	city_back1a = background(0,0,5,"city_back1.png",False)
+	player_meters_traveled = city_back1b = background(1280,0,5,"city_back1.png",True)
+
+	city_back2a = background(0,0,1,"city_back2.png",False)
+	city_back2b = background(1280,0,1,"city_back2.png",False)
+
 	typing = text_game()
 
 	clock = pygame.time.Clock()
@@ -306,8 +304,19 @@ def running_game(screen):
 
 			typing.game(event)
 
-		background_1.draw(screen,collision)
-		player_meters_traveled = background_2.draw(screen,collision)
+		# background_1.draw(screen,collision)
+		#  background_2.draw(screen,collision)
+		
+		screen.fill((50,50,50))
+
+		city_back2a.draw(screen,collision)
+		city_back2b.draw(screen,collision)
+
+
+		city_back1a.draw(screen,collision)
+		player_meters_traveled =city_back1b.draw(screen,collision)
+
+
 		
 		
 		
