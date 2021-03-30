@@ -7,7 +7,7 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 
 
-word_list = ["pizza pie"]
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when"]
 
 
 def displayText(surface,message,x,y,size,r,g,b):
@@ -223,7 +223,11 @@ class police():
 
 
 		self.font = pygame.font.Font(None, 80)
-		self.color = pygame.Color(56,254,220)
+
+		self.aqua = pygame.Color(56,254,220)
+		self.red = pygame.Color(255,0,0)
+
+		self.color = self.aqua
 		self.text = ""
 		self.txt_surface = self.font.render(self.text, True, self.color)
 		self.txt_rect = self.txt_surface.get_rect()
@@ -239,6 +243,14 @@ class police():
 		self.points = 0
 
 		self.attack = False
+
+
+		self.txt_surface1 = self.font.render(self.text, True, self.color)
+		self.txt_rect1 = self.txt_surface.get_rect()
+		self.txt_x1 = self.txt_rect[2]#
+		self.txt_length1 = 0
+
+
 
 
 	def txt_game(self,event):
@@ -266,6 +278,10 @@ class police():
 				self.text += event.unicode
 
 	def txt_draw(self):
+		self.txt_rect1 = self.txt_surface1.get_rect()
+		self.txt_surface1 = self.font.render(self.word, True, self.red)
+		screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
+
 		self.txt_rect = self.txt_surface.get_rect()
 		self.txt_surface = self.font.render(self.text, True, self.color)
 		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 600))
@@ -279,7 +295,7 @@ class police():
 			self.attack=False
 		else:
 			if collision==True:
-				self.rect[0]+=self.speed + 3
+				self.rect[0]+=self.speed + 5
 			if collision==False:
 				self.rect[0]+= self.speed
 				# print(self.rect[0])
@@ -297,7 +313,6 @@ class police():
 		if self.index >= len(self.images):
 			self.index = 0
 		self.image = self.images[self.index]
-
 
 
 		
@@ -345,14 +360,11 @@ def running_game(screen):
 		city_back2a.draw(screen,collision)
 		city_back2b.draw(screen,collision)
 
-
 		city_back1a.draw(screen,collision)
 		player_meters_traveled =city_back1b.draw(screen,collision)
 
-
 		grass.draw(screen,collision)
 		grassb.draw(screen,collision)
-		
 		
 		me.render(collision)
 
@@ -383,6 +395,10 @@ def running_game(screen):
 		else:
 			get_caught = False
 
+
+		if player_meters_traveled >= 30:
+			print("win")
+			done = True
 
 		# print(screen)
 		# print(collision)
