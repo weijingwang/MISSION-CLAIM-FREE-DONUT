@@ -178,6 +178,10 @@ class background():
 
 		self.x-=self.scroll_speed
 		self.meters_traveled+=self.scroll_speed/100
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of c2848db (frixed broken background)
 
 
 		if self.x<=-800:
@@ -185,8 +189,11 @@ class background():
 
 		screen.blit(pygame.transform.scale(self.image,(800,450)),(self.x,self.y))
 
+<<<<<<< HEAD
 		# screen.blit(pygame.transform.scale(blackTexture, (800, 600)), (0, 0))
 
+=======
+>>>>>>> parent of c2848db (frixed broken background)
 		if self.score_counter == True:
 			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
 
