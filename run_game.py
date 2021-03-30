@@ -6,8 +6,6 @@ pygame.init()
 
 screen = pygame.display.set_mode((1280, 720))
 
-done = False
-
 
 def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
@@ -124,18 +122,17 @@ class player():
 			# print("shift")
 			pass
 
-
-
-
 class obstacle():
 	"""docstring for obstacle"""
 	def __init__(self):
-		self.image = pygame.Surface([100, 200])
-		self.image.fill((255, 0, 0))
+
+		self.image = pygame.image.load('apple.png')
 		self.rect = self.image.get_rect()
 		self.rect.x = 800
 		self.rect.y = 450
 		self.speed = 20
+		
+
 
 	def render(self,collision):
 
@@ -155,6 +152,16 @@ class obstacle():
 class background():
 	"""docstring for backgro"""
 	def __init__(self, x,y):
+		self.images = []
+		self.images.append(pygame.image.load('player-1.png'))
+		self.images.append(pygame.image.load('player-2.png'))
+		self.index = 0
+		self.image = self.images[self.index]
+
+		self.rect = self.image.get_rect()
+
+
+
 		self.x=x
 		self.y=y
 
@@ -171,7 +178,7 @@ class background():
 
 
 
-		# print(self.meters_traveled)
+		
 
 		if self.x<=-1280:
 			self.x=1280
@@ -187,57 +194,180 @@ class background():
 		else:
 			self.scroll_speed =5
 
+		# print(self.meters_traveled)
+		return self.meters_traveled
+
 
 class police():
 	"""docstring for police"""
 	def __init__(self):
-		self.x = x
-		self.y = y
-		self.speed = 10
+
+		self.speed = 3
+		self.meters_traveled = -5
+
+		self.images = []
+		self.images.append(pygame.image.load('police-1.png'))
+		self.images.append(pygame.image.load('police-2.png'))
+		self.index = 0
+		self.image = self.images[self.index]
+
+		self.rect = self.image.get_rect()
+
+		self.rect.x = -1280
+
+		self.rect.y = 250
+
+	def chase(self,player_meters_traveled,collision):
+		self.meters_traveled+=self.speed/100
+		# print(self.meters_traveled)
+
 		
 
 
+		if collision==True:
+			self.rect[0]+=self.speed
+		else:
+			self.rect[0]+= 1
 
-me = player()
-poop = obstacle()
-
-background_1 = background(0,0)
-background_2 = background(1280,0)
-
-clock = pygame.time.Clock()
-collision = False
-
-pygame.mixer.music.load("national_anthem.mp3")
-#pygame.mixer.music.load("./assets/title.ogg")  
-pygame.mixer.music.play(-1,0.0)
-
-while not done:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			done = True
+		print(self.rect[0])
+		screen.blit(self.image, self.rect)
 
 
-	background_1.draw(screen,collision)
-	background_2.draw(screen,collision)
-	
-	
-	
-	me.render(collision)
 
-	me.update()
+		# if self.meters_traveled>=player_meters_traveled:
+		# 	print("lose")
 
-	obstacle_height = poop.render(collision)
-	me.leap(collision,obstacle_height)
-	me.crouch(collision)
-	if me.rect.colliderect(poop.rect):
+	def update(self):
+		self.index += 1
+		if self.index >= len(self.images):
+			self.index = 0
+		self.image = self.images[self.index]
 
-		collision = True
-	else:
-		collision = False
 
-	# print(screen)
-	# print(collision)
-	clock.tick(30)
+		
+		
+def running_game(screen):
 
-	pygame.display.flip()
+	me = player()
+	poop = obstacle()
+	chasers = police()
+	background_1 = background(0,0)
+	background_2 = background(1280,0)
 
+	clock = pygame.time.Clock()
+
+	done = False
+	collision = False
+
+	get_caught = False
+
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				done = True
+
+
+		background_1.draw(screen,collision)
+		player_meters_traveled = background_2.draw(screen,collision)
+		
+		
+		
+		me.render(collision)
+
+		me.update()
+
+		obstacle_height = poop.render(collision)
+		me.leap(collision,obstacle_height)
+		me.crouch(collision)
+
+		chasers.chase(player_meters_traveled,collision)
+		chasers.update()
+
+		if me.rect.colliderect(poop.rect):
+
+			collision = True
+		else:
+			collision = False
+
+		if me.rect.colliderect(chasers.rect):
+			get_caught = True
+			quit()		
+		else:
+			get_caught = False
+
+
+		# print(screen)
+		# print(collision)
+		clock.tick(30)
+
+		pygame.display.flip()
+
+# class cutscene():
+# 	"""docstring for cutscene"""
+# 	def __init__(self):
+# 		self.arg = arg
+		
+cutscene_1 = pygame.image.load("cutscene_1.png")
+cutscene_1text = pygame.image.load("cutscene_1b.png")
+cutscene_2 = pygame.image.load("cutscene_2.png")
+cutscene_3 = pygame.image.load("cutscene_3.png")
+
+
+width = 1280
+height = 720
+
+text_x = 1280
+text_speed = 5
+text_accel = 0.1
+
+
+def cutscene(screen,width,height,text_x,text_speed,text_accel):
+	pygame.mixer.music.load("national_anthem.mp3")
+	pygame.mixer.music.play(-1,0.0)
+	done = False
+	zoom_speed = 0.00001#0.004
+	zoom_accel = 0.00001
+	zoom_accel_out = 0.02
+	clock = pygame.time.Clock()
+
+	# pygame.transform.scale(width, height)
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+
+		x=((1280/2)-(width/2))		
+		y=((720/2)-(height/2))
+
+
+
+
+		screen.blit(pygame.transform.scale(cutscene_1,(width,height)),(x,y))
+		screen.blit(cutscene_1text,(text_x,380))
+
+		width+=int(width*zoom_speed)
+		height+=int(height*zoom_speed)
+
+		zoom_speed+=zoom_accel
+
+		text_x-=text_speed
+		text_speed+=text_accel
+
+
+		if zoom_speed >= 0.0021400000000000047:
+			done=True
+
+		if text_x<=15:
+			text_speed=0
+
+		print(text_x)
+
+
+
+		clock.tick(30)
+
+
+		pygame.display.flip()
+
+cutscene(screen,1280,720,1280,5,0.1)
+running_game(screen)
