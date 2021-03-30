@@ -203,8 +203,11 @@ class police():
 		self.meters_traveled = -5
 
 		self.images = []
-		self.images.append(pygame.image.load('police-1.png').convert_alpha())
-		self.images.append(pygame.image.load('police-2.png').convert_alpha())
+		# self.images.append(pygame.image.load('police-1.png').convert_alpha())
+		# self.images.append(pygame.image.load('police-2.png').convert_alpha())
+
+		self.images.append(pygame.image.load('player-1.png').convert_alpha())
+		self.images.append(pygame.image.load('player-2.png').convert_alpha())
 		self.index = 0
 		self.image = self.images[self.index]
 
@@ -227,8 +230,8 @@ class police():
 		
 		if hits_police == True:
 			self.finish_move=False
-			self.rect[0]-=self.speed
-			print("moved")
+			self.rect[0]-=100
+			
 			self.finish_move=True
 
 
@@ -263,6 +266,8 @@ class police():
 
 		screen.blit(self.image, self.rect)
 
+
+		print(self.finish_move)
 		return self.finish_move
 
 
@@ -314,6 +319,7 @@ class text_game():
 
 					if police_finished_move == True:
 						# self.hit = False
+						self.hit = False
 						print(self.hit)
 					# else:
 					# 	self.hit= True
