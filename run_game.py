@@ -220,7 +220,7 @@ class police():
 
 		self.rect = self.image.get_rect()
 
-		self.rect.x = -1280
+		self.rect.x = -200
 
 		self.rect.y = 250
 
@@ -252,12 +252,14 @@ class police():
 class text_game():
 	"""docstring for text_game"""
 	def __init__(self):
-		self.font = pygame.font.Font(None, 32)
+		self.font = pygame.font.Font(None, 80)
 		self.color = pygame.Color('dodgerblue2')
 		self.text = ""
 		self.txt_surface = self.font.render(self.text, True, self.color)
 		self.rect = self.txt_surface.get_rect()
-		self.x = (1280/2)-self.rect[0]/2
+		self.x = self.rect[2]#
+		self.length = 0
+
 	def game(self,event):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
@@ -267,13 +269,14 @@ class text_game():
 				self.text = self.text[:-1]
 			else:
 				self.text += event.unicode
+
 	def draw(self):
 		self.rect = self.txt_surface.get_rect()
-		self.x = (1280/2)-self.txt_surface[0]/2
 		self.txt_surface = self.font.render(self.text, True, self.color)
-		# print(self.txt_surface)
-		print(self.rect[0])
-		screen.blit(self.txt_surface, (self.x, 100))
+		screen.blit(self.txt_surface, ((1280/2)-self.rect[2]/2, 600))
+
+
+
 
 
 
@@ -319,7 +322,7 @@ def running_game(screen):
 		chasers.chase(player_meters_traveled,collision)
 		chasers.update()
 
-		
+
 		typing.draw()
 
 
