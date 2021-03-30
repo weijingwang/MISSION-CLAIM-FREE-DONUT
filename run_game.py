@@ -6,12 +6,10 @@ pygame.init()
 
 screen = pygame.display.set_mode((1280, 720))
 
-
 def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
 	textImage = myfont.render(message, True, (r,g,b))
 	surface.blit(textImage,(x,y))
-
 
 class player():
 	"""docstring for player"""
@@ -128,7 +126,6 @@ class player():
 			# print("shift")
 			pass
 
-
 class obstacle():
 	"""docstring for obstacle"""
 	def __init__(self):
@@ -154,7 +151,6 @@ class obstacle():
 		else:
 			self.rect[0] -= 20
 		screen.blit(self.image, self.rect)
-
 
 class background():
 	"""docstring for backgro"""
@@ -199,7 +195,6 @@ class background():
 			self.meters_traveled+=self.scroll_speed/100
 			return self.meters_traveled
 
-
 class police():
 	"""docstring for police"""
 	def __init__(self):
@@ -219,21 +214,48 @@ class police():
 
 		self.rect.y = 250
 
-	def chase(self,collision):
+
+		self.xchange = 0
+
+		self.finish_move = True
+		self.move_distance =0
+
+	def chase(self,collision,hit_police):
 		# self.meters_traveled+=self.speed/100
 		# print(self.meters_traveled)
 
 		
-		if collision==True:
-			self.rect[0]+=self.speed + 3
-		if collision==False:
-			self.rect[0]+= self.speed
-			print(self.rect[0])
-		# print(collision)
-		# print(self.rect[0])
+
+			
+			# self.finish_move = True
+		if self.finish_move == False:
+
+			self.rect[0]-=5
+			self.move_distance +=5
+			if self.move_distance >=100:
+				self_finish_move = True
+				self.move_distance=0
+				self.finish_move = True
+				# return self.finish_move
+		else:
+			if collision==True:
+				self.rect[0]+=self.speed + 3
+			if collision==False:
+				self.rect[0]+= self.speed
+				# print(self.rect[0])
+			# print(collision)
+			# print(self.rect[0])
+			
+			# if self.meters_traveled>=player_meters_traveled:
+			# 	print("lose")
+			
+			if hit_police==True:
+				# print(hit_police)
+				self.finish_move = False
+
 		screen.blit(self.image, self.rect)
-		# if self.meters_traveled>=player_meters_traveled:
-		# 	print("lose")
+
+
 
 	def update(self):
 		self.index += 1
@@ -241,7 +263,9 @@ class police():
 			self.index = 0
 		self.image = self.images[self.index]
 
-
+	def police_details(self):
+		print(self.finish_move)
+		return self.finish_move
 
 class text_game():
 	"""docstring for text_game"""
@@ -254,21 +278,52 @@ class text_game():
 		self.x = self.rect[2]#
 		self.length = 0
 
-	def game(self,event):
+		self.word_list = ["cat"]
+		self.word = random.choice(self.word_list)
+
+		self.output = ""
+		self.output_store = ""
+
+
+		self.points = 0
+
+		self.hit = False
+
+	def game(self,event,police_finished_move):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
-				print(self.text)
+				self.output = self.text
 				self.text = ""
+
+				if self.output==self.word:
+					self.points +=1
+					
+					self.word = random.choice(self.word_list)
+
+					self.hit = True
+					# if police_finished_move == True:
+					# 	self.hit = False
+					# 	print(self.hit)
+					# else:
+					# 	self.hit= True
+					# 	print(self.hit)
+
 			elif event.key == pygame.K_BACKSPACE:
 				self.text = self.text[:-1]
 			else:
 				self.text += event.unicode
+
+		# print(self.hit)
+		return self.hit
+
+
 
 	def draw(self):
 		self.rect = self.txt_surface.get_rect()
 		self.txt_surface = self.font.render(self.text, True, self.color)
 		screen.blit(self.txt_surface, ((1280/2)-self.rect[2]/2, 600))
 
+		
 
 
 
@@ -304,7 +359,8 @@ def running_game(screen):
 			if event.type == pygame.QUIT:
 				done = True
 
-			typing.game(event)
+			finish_move = chasers.police_details()
+			hit_police = typing.game(event,finish_move)
 
 		# background_1.draw(screen,collision)
 		#  background_2.draw(screen,collision)
@@ -331,11 +387,12 @@ def running_game(screen):
 		me.leap(collision,obstacle_height)
 		me.crouch(collision)
 
-		chasers.chase(collision)
+		chasers.chase(collision,hit_police)
 		chasers.update()
 
-
+		# print(hit_police)
 		typing.draw()
+
 
 
 		if me.rect.colliderect(poop.rect):
