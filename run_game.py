@@ -44,6 +44,9 @@ class player():
 
 		self.shift = False
 
+		self.power = 100
+		self.power_max=100
+
 	def render(self,collision):
 		pressed = pygame.key.get_pressed()
 		# if pressed[pygame.K_UP]: self.rect[1] -= self.speed_y
@@ -71,14 +74,17 @@ class player():
 			self.index = 0
 		self.image = self.images[self.index]
 
-
-
 	def leap(self,collision,obstacle_height):
 		pressed = pygame.key.get_pressed()
 
 		if self.jump==False:
-			if pressed[pygame.K_UP] or pressed[pygame.K_SPACE]:
+			self.power+=0.1
+			if self.power >= self.power_max:
+				self.power = self.power_max
+
+			if pressed[pygame.K_UP]:
 				# print("jump")
+				self.power-=10
 				self.jump=True
 
 		if self.jump==True:
@@ -102,11 +108,11 @@ class player():
 				if collision==True:
 
 					self.rect.y = 451-obstacle_height
-					print(self.rect.y)
+					# print(self.rect.y)
 					
 				else:
 					self.rect.y = self.floor
-
+		# print(self.power)
 	def crouch(self,collision):
 		self.shift=False
 		pressed = pygame.key.get_pressed()
@@ -121,6 +127,7 @@ class player():
 			#shrink
 			# print("shift")
 			pass
+
 
 class obstacle():
 	"""docstring for obstacle"""
@@ -229,11 +236,8 @@ class police():
 		else:
 			self.rect[0]+= 1
 
-		print(self.rect[0])
+		# print(self.rect[0])
 		screen.blit(self.image, self.rect)
-
-
-
 		# if self.meters_traveled>=player_meters_traveled:
 		# 	print("lose")
 
@@ -242,6 +246,36 @@ class police():
 		if self.index >= len(self.images):
 			self.index = 0
 		self.image = self.images[self.index]
+
+
+
+class text_game():
+	"""docstring for text_game"""
+	def __init__(self):
+		self.font = pygame.font.Font(None, 32)
+		self.color = pygame.Color('dodgerblue2')
+		self.text = ""
+		self.txt_surface = self.font.render(self.text, True, self.color)
+		self.rect = self.txt_surface.get_rect()
+		self.x = (1280/2)-self.rect[0]/2
+	def game(self,event):
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_RETURN:
+				print(self.text)
+				self.text = ""
+			elif event.key == pygame.K_BACKSPACE:
+				self.text = self.text[:-1]
+			else:
+				self.text += event.unicode
+	def draw(self):
+		self.rect = self.txt_surface.get_rect()
+		self.x = (1280/2)-self.txt_surface[0]/2
+		self.txt_surface = self.font.render(self.text, True, self.color)
+		# print(self.txt_surface)
+		print(self.rect[0])
+		screen.blit(self.txt_surface, (self.x, 100))
+
+
 
 
 		
@@ -253,6 +287,7 @@ def running_game(screen):
 	chasers = police()
 	background_1 = background(0,0)
 	background_2 = background(1280,0)
+	typing = text_game()
 
 	clock = pygame.time.Clock()
 
@@ -266,6 +301,7 @@ def running_game(screen):
 			if event.type == pygame.QUIT:
 				done = True
 
+			typing.game(event)
 
 		background_1.draw(screen,collision)
 		player_meters_traveled = background_2.draw(screen,collision)
@@ -282,6 +318,10 @@ def running_game(screen):
 
 		chasers.chase(player_meters_traveled,collision)
 		chasers.update()
+
+		
+		typing.draw()
+
 
 		if me.rect.colliderect(poop.rect):
 
@@ -307,11 +347,15 @@ def running_game(screen):
 # 	def __init__(self):
 # 		self.arg = arg
 		
+
+
+
+
+
 cutscene_1 = pygame.image.load("cutscene_1.png")
 cutscene_1text = pygame.image.load("cutscene_1b.png")
 cutscene_2 = pygame.image.load("cutscene_2.png")
 cutscene_3 = pygame.image.load("cutscene_3.png")
-
 
 width = 1280
 height = 720
@@ -319,8 +363,6 @@ height = 720
 text_x = 1280
 text_speed = 5
 text_accel = 0.1
-
-
 def cutscene(screen,width,height,text_x,text_speed,text_accel):
 	pygame.mixer.music.load("national_anthem.mp3")
 	pygame.mixer.music.play(-1,0.0)
@@ -360,7 +402,7 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 		if text_x<=15:
 			text_speed=0
 
-		print(text_x)
+		# print(text_x)
 
 
 
@@ -369,5 +411,5 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 		pygame.display.flip()
 
-cutscene(screen,1280,720,1280,5,0.1)
+# cutscene(screen,1280,720,1280,5,0.1)
 running_game(screen)
