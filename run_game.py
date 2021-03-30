@@ -204,7 +204,7 @@ class police():
 	"""docstring for police"""
 	def __init__(self):
 
-		self.speed = 0.01
+		self.speed = 1
 		self.meters_traveled = -5
 
 		self.images = []
@@ -219,16 +219,17 @@ class police():
 
 		self.rect.y = 250
 
-	def chase(self,player_meters_traveled,collision):
-		self.meters_traveled+=self.speed/100
+	def chase(self,collision):
+		# self.meters_traveled+=self.speed/100
 		# print(self.meters_traveled)
 
 		
 		if collision==True:
-			self.rect[0]+=self.speed + 5
-		else:
-			self.rect[0]+= 0.01
-
+			self.rect[0]+=self.speed + 3
+		if collision==False:
+			self.rect[0]+= self.speed
+			print(self.rect[0])
+		# print(collision)
 		# print(self.rect[0])
 		screen.blit(self.image, self.rect)
 		# if self.meters_traveled>=player_meters_traveled:
@@ -330,7 +331,7 @@ def running_game(screen):
 		me.leap(collision,obstacle_height)
 		me.crouch(collision)
 
-		chasers.chase(player_meters_traveled,collision)
+		chasers.chase(collision)
 		chasers.update()
 
 
