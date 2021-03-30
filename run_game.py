@@ -175,7 +175,6 @@ class background():
 		self.score_counter = score_counter
 		
 	def draw(self,screen,collision):
-		shake_speed = random.randrange(10)
 
 		self.x-=self.scroll_speed
 		self.meters_traveled+=self.scroll_speed/100
@@ -287,6 +286,7 @@ def running_game(screen):
 
 	city_back2a = background(0,0,1,"city_back2.png",False)
 	city_back2b = background(1280,0,1,"city_back2.png",False)
+	grass = background(0,0,20,"grass.png",False)
 
 	typing = text_game()
 
@@ -317,7 +317,7 @@ def running_game(screen):
 		player_meters_traveled =city_back1b.draw(screen,collision)
 
 
-		
+		grass.draw(screen,collision)
 		
 		
 		me.render(collision)
