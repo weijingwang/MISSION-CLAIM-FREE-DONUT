@@ -425,3 +425,7 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 # cutscene(screen,1280,720,1280,5,0.1)
 running_game(screen)
+
+
+
+
