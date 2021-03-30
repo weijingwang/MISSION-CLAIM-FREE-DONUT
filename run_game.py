@@ -287,6 +287,7 @@ def running_game(screen):
 	city_back2a = background(0,0,1,"city_back2.png",False)
 	city_back2b = background(1280,0,1,"city_back2.png",False)
 	grass = background(0,0,20,"grass.png",False)
+	grassb = background(1280,0,20,"grass.png",False)
 
 	typing = text_game()
 
@@ -318,6 +319,7 @@ def running_game(screen):
 
 
 		grass.draw(screen,collision)
+		grassb.draw(screen,collision)
 		
 		
 		me.render(collision)
