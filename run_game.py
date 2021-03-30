@@ -177,8 +177,6 @@ class background():
 	def draw(self,screen,collision):
 
 		self.x-=self.scroll_speed
-		self.meters_traveled+=self.scroll_speed/100
-
 
 		if self.x<=-1280:
 			self.x=1280
@@ -187,8 +185,7 @@ class background():
 
 		# screen.blit(pygame.transform.scale(blackTexture, (800, 600)), (0, 0))
 
-		if self.score_counter == True:
-			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
+
 
 		if collision==True:
 			self.scroll_speed=0
@@ -197,7 +194,10 @@ class background():
 			self.scroll_speed =self.scroll_speed_bank
 
 		# print(self.meters_traveled)
-		return self.meters_traveled
+		if self.score_counter == True:
+			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
+			self.meters_traveled+=self.scroll_speed/100
+			return self.meters_traveled
 
 
 class police():
