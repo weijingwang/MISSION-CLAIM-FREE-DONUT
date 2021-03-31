@@ -4,15 +4,6 @@ pygame.mixer.pre_init()
 
 pygame.init()
 
-screen = pygame.display.set_mode((1280, 720))
-
-
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog bark","dance cat","pants","boil","eel",
-"president","police","water","rojo","please","fast","headbutt","frog","baby","music","drive car","horse","apply","adress","money","gambling","addiction",
-"i am dancing","goat","runner"
-
-]
-
 def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
 	textImage = myfont.render(message, True, (r,g,b))
@@ -236,7 +227,7 @@ class police():
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
-		self.rect.x = -50
+		self.rect.x = -200
 		self.rect.y = 250
 
 		self.xchange = 0
@@ -340,7 +331,7 @@ class police():
 			self.attack=False
 		else:
 			if collision==True:
-				self.rect[0]+=self.speed + 5
+				self.rect[0]+=self.speed + 2
 			if collision==False:
 				self.rect[0]+= self.speed
 				# print(self.rect[0])
@@ -360,11 +351,93 @@ class police():
 		self.image = self.images[self.index]
 
 
-		
+screen = pygame.display.set_mode((1280, 720))
+
+
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
+"president","police","water","rojo","please","fast","headbutt","frog","baby","music","drive car","horse","apply","adress","money","gambling","addiction",
+"i am dancing","goat","runner"
+]
+
+
+# cutscene_1 = pygame.image.load("./assets/cutscene_1.png").convert_alpha()
+# cutscene_1text = pygame.image.load("./assets/cutscene_1b.png").convert_alpha()
+# cutscene_2 = pygame.image.load("./assets/cutscene_2.png").convert_alpha()
+# cutscene_3 = pygame.image.load("./assets/cutscene_3.png").convert_alpha()
+
+width = 1280
+height = 720
+
+text_x = 1280
+text_speed = 5
+text_accel = 0.1
+def cutscene(screen,width,height,text_x,text_speed,text_accel):
+	pygame.mixer.music.load("./assets/national_anthem.mp3")
+	pygame.mixer.music.play(-1,0.0)
+	done = False
+	zoom_speed = 0.00001#0.004
+	zoom_accel = 0.00001
+	zoom_accel_out = 0.02
+	clock = pygame.time.Clock()
+
+	# pygame.transform.scale(width, height)
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_RETURN:
+					done= True
+
+		x=((1280/2)-(width/2))		
+		y=((720/2)-(height/2))
 
 
 
 
+		screen.blit(pygame.transform.scale(cutscene_1,(width,height)),(x,y))
+		screen.blit(cutscene_1text,(text_x,380))
+
+		width+=int(width*zoom_speed)
+		height+=int(height*zoom_speed)
+
+		zoom_speed+=zoom_accel
+
+		text_x-=text_speed
+		text_speed+=text_accel
+
+
+		if zoom_speed >= 0.0021400000000000047:
+			done=True
+
+		if text_x<=15:
+			text_speed=0
+
+		# print(text_x)
+
+
+
+		clock.tick(30)
+
+
+		pygame.display.flip()
+
+
+def pants_president(screen,image):
+	done = False
+	clock = pygame.time.Clock()
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_RETURN:
+					done= True
+		screen.blit(pygame.transform.scale(image,(1280,720)),(0,0))
+		clock.tick(30)
+
+
+		pygame.display.flip()
 
 
 def running_game(screen):
@@ -442,7 +515,7 @@ def running_game(screen):
 			get_caught = False
 
 
-		if player_meters_traveled >= 150:
+		if player_meters_traveled >= 100:
 			print("win")
 			done = True
 
@@ -452,77 +525,6 @@ def running_game(screen):
 
 		pygame.display.flip()
 
-# class cutscene():
-# 	"""docstring for cutscene"""
-# 	def __init__(self):
-# 		self.arg = arg
-		
+# cutscene(screen,1280,720,1280,5,0.1)
 
-
-
-
-
-cutscene_1 = pygame.image.load("./assets/cutscene_1.png").convert_alpha()
-cutscene_1text = pygame.image.load("./assets/cutscene_1b.png").convert_alpha()
-cutscene_2 = pygame.image.load("./assets/cutscene_2.png").convert_alpha()
-cutscene_3 = pygame.image.load("./assets/cutscene_3.png").convert_alpha()
-
-width = 1280
-height = 720
-
-text_x = 1280
-text_speed = 5
-text_accel = 0.1
-def cutscene(screen,width,height,text_x,text_speed,text_accel):
-	pygame.mixer.music.load("./assets/national_anthem.mp3")
-	pygame.mixer.music.play(-1,0.0)
-	done = False
-	zoom_speed = 0.00001#0.004
-	zoom_accel = 0.00001
-	zoom_accel_out = 0.02
-	clock = pygame.time.Clock()
-
-	# pygame.transform.scale(width, height)
-	while not done:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				quit()
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_RETURN:
-					done= True
-
-		x=((1280/2)-(width/2))		
-		y=((720/2)-(height/2))
-
-
-
-
-		screen.blit(pygame.transform.scale(cutscene_1,(width,height)),(x,y))
-		screen.blit(cutscene_1text,(text_x,380))
-
-		width+=int(width*zoom_speed)
-		height+=int(height*zoom_speed)
-
-		zoom_speed+=zoom_accel
-
-		text_x-=text_speed
-		text_speed+=text_accel
-
-
-		if zoom_speed >= 0.0021400000000000047:
-			done=True
-
-		if text_x<=15:
-			text_speed=0
-
-		# print(text_x)
-
-
-
-		clock.tick(30)
-
-
-		pygame.display.flip()
-
-cutscene(screen,1280,720,1280,5,0.1)
-# running_game(screen)
+running_game(screen)
