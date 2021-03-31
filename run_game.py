@@ -9,6 +9,12 @@ def displayText(surface,message,x,y,size,r,g,b):
 	textImage = myfont.render(message, True, (r,g,b))
 	surface.blit(textImage,(x,y))
 
+def open_mystery_file():
+	print("look at mystery_file.txt")
+	f = open("mystery_file.txt", "w")
+	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
+	f.close()
+
 class player():
 	"""docstring for player"""
 	def __init__(self):
@@ -55,6 +61,9 @@ class player():
 		if self.rect[0]>=1200:
 			self.rect[0] = 1200
 			self.rect[0]-=50
+		elif self.rect[0]<=0:
+			self.rect[0] = 0
+			self.rect[0]+=10
 		else:
 			if pressed[pygame.K_LEFT]: self.rect[0] -= self.speed_x
 			if pressed[pygame.K_RIGHT]: self.rect[0] += self.speed_x
@@ -309,15 +318,13 @@ class police():
 				if self.output==self.word:
 					self.points +=1
 					if self.cutscene == True:
-						print("police works")
+						# print("police works")
 						return True
 
 					self.previous_word = self.word
 					if self.rect[0] >-100:
 						self.word = random.choice(self.word_list)
-
-						print("next")
-
+						# print("next")
 						self.attack = True
 						self.txt_cooldown = 0
 					# if police_finished_move == True:
@@ -337,14 +344,14 @@ class police():
 				self.text += event.unicode
 
 		if self.word == self.previous_word:
-			print("warn")
+			# print("warn")
 			self.word = random.choice(self.word_list)
 
 
 	def txt_draw(self):
 		# print(self.cutscene)		
 		if self.cutscene == True:
-			print("hi")		
+			# print("hi")		
 			self.txt_rect1 = self.txt_surface1.get_rect()
 			self.txt_surface1 = self.font.render(self.word, True, self.red)
 			screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
@@ -597,7 +604,7 @@ def steal_donut(screen):
 		else:
 			collision = False
 
-		print(finish_game)
+		# print(finish_game)
 		if finish_game == True:
 			print("skipped")
 			done = True
@@ -634,6 +641,7 @@ if result == True:
 	print("YOU WIN")
 elif result == False:
 	print("LOSE")
+	open_mystery_file()
 	lose_event(screen,lose, fail)
 
 
