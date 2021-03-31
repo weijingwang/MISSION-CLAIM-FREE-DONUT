@@ -1,8 +1,8 @@
 import pygame
 import random
 pygame.mixer.pre_init()
-
 pygame.init()
+pygame.display.set_caption("MISSION: CLAIM FREE DONUT (pyweek 31)")
 
 def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
@@ -372,7 +372,7 @@ class police():
 			self.attack=False
 		else:
 			if collision==True:
-				self.rect[0]+=self.speed + 1
+				self.rect[0]+=self.speed + 3
 			if collision==False:
 				self.rect[0]+= self.speed
 		if self.rect[0]<0:
@@ -397,8 +397,11 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 ]
 
 
-# cutscene_1 = pygame.image.load("./assets/cutscene_1.png").convert_alpha()
-# cutscene_1text = pygame.image.load("./assets/cutscene_1b.png").convert_alpha()
+cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
+cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
+cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
+lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
+fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
 # cutscene_2 = pygame.image.load("./assets/cutscene_2.png").convert_alpha()
 # cutscene_3 = pygame.image.load("./assets/cutscene_3.png").convert_alpha()
 
@@ -406,9 +409,12 @@ width = 1280
 height = 720
 
 text_x = 1280
+text_x2 = 2000
+
 text_speed = 5
+text_speed1 = 5
 text_accel = 0.1
-def cutscene(screen,width,height,text_x,text_speed,text_accel):
+def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2):
 	pygame.mixer.music.load("./assets/national_anthem.mp3")
 	pygame.mixer.music.play(-1,0.0)
 	done = False
@@ -417,23 +423,22 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 	zoom_accel_out = 0.02
 	clock = pygame.time.Clock()
 
+
 	# pygame.transform.scale(width, height)
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit()
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_RETURN:
+				if event.key == pygame.K_SPACE:
 					done= True
 
 		x=((1280/2)-(width/2))		
 		y=((720/2)-(height/2))
 
-
-
-
 		screen.blit(pygame.transform.scale(cutscene_1,(width,height)),(x,y))
-		screen.blit(cutscene_1text,(text_x,380))
+		screen.blit(cutscene_1text,(text_x,30))#380
+		screen.blit(cutscene_1text1,(text_x2,620))#380
 
 		width+=int(width*zoom_speed)
 		height+=int(height*zoom_speed)
@@ -441,35 +446,19 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 		zoom_speed+=zoom_accel
 
 		text_x-=text_speed
+		text_x2-=text_speed2
 		text_speed+=text_accel
 
 
 		if zoom_speed >= 0.0021400000000000047:
-			done=True
+			zoom_speed =0
 
 		if text_x<=15:
 			text_speed=0
+		if text_x2<=544:
+			text_speed2=0
 
 		# print(text_x)
-
-
-
-		clock.tick(30)
-
-
-		pygame.display.flip()
-
-def pants_president(screen,image):
-	done = False
-	clock = pygame.time.Clock()
-	while not done:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				quit()
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_RETURN:
-					done= True
-		screen.blit(pygame.transform.scale(image,(1280,720)),(0,0))
 		clock.tick(30)
 
 
@@ -493,7 +482,6 @@ def running_game(screen):
 	grass = background(0,0,20,"./assets/grass.png",False,False,20)
 	grassb = background(1280,0,20,"./assets/grass.png",False,False,20)
 
-
 	clock = pygame.time.Clock()
 
 	done = False
@@ -501,6 +489,8 @@ def running_game(screen):
 
 	get_caught = False
 	finish_game = False
+
+	win = None
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -545,14 +535,16 @@ def running_game(screen):
 
 		if me.rect.colliderect(chasers.rect):
 			get_caught = True
-			quit()		
+			win = False
+			return win
 		else:
 			get_caught = False
 
 
 		if player_meters_traveled >= 100:
 			print("win")
-			done = True
+			win = True
+			return win	
 
 		if finish_game == True:
 			print("skipped")
@@ -564,10 +556,8 @@ def running_game(screen):
 		pygame.display.flip()
 
 
-
+instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
 def steal_donut(screen):
-	pygame.mixer.music.load("./assets/national_anthem.mp3")
-	pygame.mixer.music.play(-1,0.0)
 	me = player()
 	donut = obstacle(True)
 	city_back1a = background(0,0,5,"./assets/city_back1.png",True,True,2)
@@ -596,6 +586,8 @@ def steal_donut(screen):
 		me.leap(collision,obstacle_height)
 		me.power_bar(screen)
 
+		screen.blit(instructions,(0,0))
+
 		text_only.txt_draw()
 		
 
@@ -609,17 +601,40 @@ def steal_donut(screen):
 		if finish_game == True:
 			print("skipped")
 			done = True
-
-
-
 		clock.tick(30)
 
 		pygame.display.flip()
 
 
-# cutscene(screen,1280,720,1280,5,0.1)
+
+def lose_event(screen,image,image2):
+	pygame.mixer.music.load("./assets/lose.mp3")
+	pygame.mixer.music.play(-1,0.0)
+	done = False
+	clock = pygame.time.Clock()
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					done= True
+		random_num1 = random.randrange(-2,2)
+		random_num2 = random.randrange(-2,2)
+		screen.blit(image,(0,0))
+		screen.blit(image2,(0+random_num1,676+random_num2))
+		clock.tick(30)
+		pygame.display.flip()
+
+
+title_screen(screen,1280,720,1280,5,0.1,2000,10)
 steal_donut(screen)
-running_game(screen)
+result = running_game(screen)
+if result == True:
+	print("YOU WIN")
+elif result == False:
+	print("LOSE")
+	lose_event(screen,lose, fail)
 
 
 
