@@ -346,8 +346,8 @@ screen = pygame.display.set_mode((1280, 720))
 
 
 word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
-"president","police","water","rojo","please","fast","headbutt","frog","baby","music","drive car","horse","apply","adress","money","gambling","addiction",
-"i am dancing","goat","runner"
+"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
+"i am dancing","goat","runner","prank","consume"
 ]
 
 
