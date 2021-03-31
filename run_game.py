@@ -150,7 +150,7 @@ class obstacle():
 
 		self.image = pygame.image.load('./assets/apple.png').convert_alpha()
 		self.rect = self.image.get_rect()
-		self.rect.x = 800
+		self.rect.x = 1280
 		self.rect.y = 450
 		self.speed = 20
 		
@@ -227,7 +227,7 @@ class police():
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
-		self.rect.x = -200
+		self.rect.x = -150
 		self.rect.y = 250
 
 		self.xchange = 0
@@ -269,6 +269,8 @@ class police():
 		self.next_word = True
 
 
+		self.police_icon = pygame.image.load('./assets/police-p.png').convert_alpha()
+
 
 	def txt_game(self,event):
 		# print(self.previous_word+" "+self.word)
@@ -279,10 +281,9 @@ class police():
 
 				if self.output==self.word:
 					self.points +=1
-					
-					if self.txt_cooldown==100:
 
-						self.previous_word = self.word
+					self.previous_word = self.word
+					if self.rect[0] >-100:
 						self.word = random.choice(self.word_list)
 
 						print("next")
@@ -301,26 +302,20 @@ class police():
 			else:
 				self.text += event.unicode
 
-		if self.txt_cooldown <100:
-			self.txt_cooldown+=5
-			self.next_word = False
-		elif self.txt_cooldown >=100:
-			self.txt_cooldown = 100
-			self.next_word = True
-
 		if self.word == self.previous_word:
 			print("warn")
 			self.word = random.choice(self.word_list)
 
 
 	def txt_draw(self):
-		self.txt_rect1 = self.txt_surface1.get_rect()
-		self.txt_surface1 = self.font.render(self.word, True, self.red)
-		screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
+		if self.rect[0]>-100:
+			self.txt_rect1 = self.txt_surface1.get_rect()
+			self.txt_surface1 = self.font.render(self.word, True, self.red)
+			screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
 
-		self.txt_rect = self.txt_surface.get_rect()
-		self.txt_surface = self.font.render(self.text, True, self.color)
-		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 600))
+			self.txt_rect = self.txt_surface.get_rect()
+			self.txt_surface = self.font.render(self.text, True, self.color)
+			screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 600))
 
 	def chase(self,collision):
 		# self.meters_traveled+=self.speed/100
@@ -331,15 +326,11 @@ class police():
 			self.attack=False
 		else:
 			if collision==True:
-				self.rect[0]+=self.speed + 2
+				self.rect[0]+=self.speed + 1
 			if collision==False:
 				self.rect[0]+= self.speed
-				# print(self.rect[0])
-			# print(collision)
-			# print(self.rect[0])
-			
-			# if self.meters_traveled>=player_meters_traveled:
-			# 	print("lose")
+		if self.rect[0]<0:
+			screen.blit(self.police_icon, (0,0))
 
 
 		screen.blit(self.image, self.rect)
