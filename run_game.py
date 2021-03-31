@@ -7,7 +7,7 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 
 
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when"]
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","apple","banana","orange","grape","ringo","dog","cat","pants","boil","eel"]
 
 
 def displayText(surface,message,x,y,size,r,g,b):
@@ -48,14 +48,22 @@ class player():
 
 		self.power = 100
 		self.power_max=100
+		self.ready_jump = True
+
+		self.active_color = (0,255,255)
 
 	def render(self,collision):
 		pressed = pygame.key.get_pressed()
 		# if pressed[pygame.K_UP]: self.rect[1] -= self.speed_y
 
-		if pressed[pygame.K_LEFT]: self.rect[0] -= self.speed_x
-		if pressed[pygame.K_RIGHT]: self.rect[0] += self.speed_x
 
+
+		if self.rect[0]>=1200:
+			self.rect[0] = 1200
+			self.rect[0]-=50
+		else:
+			if pressed[pygame.K_LEFT]: self.rect[0] -= self.speed_x
+			if pressed[pygame.K_RIGHT]: self.rect[0] += self.speed_x
 
 		if collision ==True:
 			# self.rect.x+=1
@@ -80,16 +88,22 @@ class player():
 		pressed = pygame.key.get_pressed()
 
 		if self.jump==False:
-			self.power+=0.1
+			self.power+=5
 			if self.power >= self.power_max:
 				self.power = self.power_max
+			if self.power <= 0:
+				self.power = 0
+				# print("set to 0")
 
-			if pressed[pygame.K_UP]:
+			if pressed[pygame.K_UP] and self.power==100:
 				# print("jump")
-				self.power-=10
+				self.power-=100
+
 				self.jump=True
 
 		if self.jump==True:
+
+
 			F =(1 / 2)*self.mass*(self.speed_y**2)
 
 			self.rect[1]-= F
@@ -114,21 +128,27 @@ class player():
 					
 				else:
 					self.rect.y = self.floor
+
+		if self.power < 100:
+			ready_jump = False
+		elif self.power >= 100:
+			ready_jump = True
+
+		print(ready_jump)
+
+		print(str(self.power))
+
 		# print(self.power)
-	def crouch(self,collision):
-		self.shift=False
-		pressed = pygame.key.get_pressed()
-		if self.shift==False:
-			if pressed[pygame.K_DOWN]:
-				self.shift=True
-				# print("key down")
-			else:
-				self.shift=False
-				# print("false")
-		if self.shift==True:
-			#shrink
-			# print("shift")
-			pass
+	def power_bar(self,screen):
+		if self.power >= 100:
+			self.active_color = (0,255,255)
+		else:
+			self.active_color = (0,255,0)
+
+		pygame.draw.rect(screen, (255,0,0), pygame.Rect(50, 25, 500, 5))
+		pygame.draw.rect(screen, self.active_color, pygame.Rect(50, 25, 500*(self.power/100), 5))
+
+
 
 class obstacle():
 	"""docstring for obstacle"""
@@ -250,6 +270,8 @@ class police():
 		self.txt_x1 = self.txt_rect[2]#
 		self.txt_length1 = 0
 
+		self.txt_cooldown = 100
+		self.next_word = True
 
 
 
@@ -265,6 +287,7 @@ class police():
 					self.word = random.choice(self.word_list)
 
 					self.attack = True
+					self.txt_cooldown = 0
 					# if police_finished_move == True:
 					# 	self.hit = False
 					# 	print(self.hit)
@@ -276,6 +299,14 @@ class police():
 				self.text = self.text[:-1]
 			else:
 				self.text += event.unicode
+
+		if self.txt_cooldown <100:
+			self.txt_cooldown+=5
+			self.next_word = False
+		elif self.txt_cooldown >=100:
+			self.txt_cooldown = 100
+			self.next_word = True
+
 
 	def txt_draw(self):
 		self.txt_rect1 = self.txt_surface1.get_rect()
@@ -291,7 +322,7 @@ class police():
 		# print(self.meters_traveled)
 			# self.finish_move = True
 		if self.attack ==True:
-			self.rect[0]-=100
+			self.rect[0]-=150
 			self.attack=False
 		else:
 			if collision==True:
@@ -372,7 +403,6 @@ def running_game(screen):
 
 		obstacle_height = poop.render(collision)
 		me.leap(collision,obstacle_height)
-		me.crouch(collision)
 
 		chasers.chase(collision)
 		chasers.update()
@@ -380,7 +410,7 @@ def running_game(screen):
 		chasers.txt_draw()
 		# print(hit_police)
 
-
+		me.power_bar(screen)
 
 
 		if me.rect.colliderect(poop.rect):
@@ -396,7 +426,7 @@ def running_game(screen):
 			get_caught = False
 
 
-		if player_meters_traveled >= 30:
+		if player_meters_traveled >= 100:
 			print("win")
 			done = True
 
@@ -478,5 +508,5 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 		pygame.display.flip()
 
-cutscene(screen,1280,720,1280,5,0.1)
+# cutscene(screen,1280,720,1280,5,0.1)
 running_game(screen)
