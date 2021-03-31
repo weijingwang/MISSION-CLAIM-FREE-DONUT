@@ -455,7 +455,7 @@ def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_s
 
 		if text_x<=15:
 			text_speed=0
-		if text_x2<=544:
+		if text_x2<=0:#544
 			text_speed2=0
 
 		# print(text_x)
