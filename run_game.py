@@ -146,17 +146,21 @@ class player():
 
 class obstacle():
 	"""docstring for obstacle"""
-	def __init__(self):
+	def __init__(self,is_cutscene):
 
 		self.image = pygame.image.load('./assets/apple.png').convert_alpha()
 		self.rect = self.image.get_rect()
 		self.rect.x = 1280
 		self.rect.y = 450
 		self.speed = 20
+
+		self.is_cutscene = is_cutscene
+		if self.is_cutscene == True:
+			self.rect.x = 2480
 		
 
 
-	def render(self,collision):
+	def render(self,collision,is_stopped):
 
 		if self.rect[0]<=0:
 			self.rect[0]=1280-+self.rect[2]
@@ -166,18 +170,15 @@ class obstacle():
 			self.speed = 0
 			# print(self.rect[3])
 			return self.rect[3]#height
+		elif is_stopped == True:
+			self.speed = 0
 		else:
 			self.rect[0] -= 20
 		screen.blit(self.image, self.rect)
 
 class background():
 	"""docstring for backgro"""
-	def __init__(self, x,y,scroll_speed,image,score_counter):
-
-
-
-
-
+	def __init__(self, x,y,scroll_speed,image,score_counter,is_cutscene,stop_after):
 		self.x=x
 		self.y=y
 		self.scroll_speed = scroll_speed
@@ -187,6 +188,10 @@ class background():
 		self.scroll_speed_bank = scroll_speed
 
 		self.score_counter = score_counter
+		self.is_cutscene = is_cutscene
+		self.stop_after = stop_after
+		self.is_stopped = False
+
 		
 	def draw(self,screen,collision):
 
@@ -199,10 +204,12 @@ class background():
 
 		# screen.blit(pygame.transform.scale(blackTexture, (800, 600)), (0, 0))
 
-
-
 		if collision==True:
 			self.scroll_speed=0
+
+		elif self.is_cutscene ==True and self.meters_traveled >=self.stop_after:
+			self.scroll_speed=0
+			self.is_stopped = True
 
 		else:
 			self.scroll_speed =self.scroll_speed_bank
@@ -213,9 +220,12 @@ class background():
 			self.meters_traveled+=self.scroll_speed/100
 			return self.meters_traveled
 
+	def return_stop(self):
+		return self.is_stopped
+
 class police():
 	"""docstring for police"""
-	def __init__(self,word_list):
+	def __init__(self,word_list,cutscene):
 
 		self.speed = 2
 		self.meters_traveled = -5
@@ -271,6 +281,9 @@ class police():
 
 		self.police_icon = pygame.image.load('./assets/police-p.png').convert_alpha()
 
+		self.cutscene = cutscene
+
+		self.skip = False
 
 	def txt_game(self,event):
 		# print(self.previous_word+" "+self.word)
@@ -281,6 +294,9 @@ class police():
 
 				if self.output==self.word:
 					self.points +=1
+					if self.cutscene == True:
+						print("police works")
+						return True
 
 					self.previous_word = self.word
 					if self.rect[0] >-100:
@@ -297,6 +313,10 @@ class police():
 					# 	self.hit= True
 					# 	print(self.hit)
 
+				elif self.output == "skip":
+					self.skip = True
+					return self.skip
+
 			elif event.key == pygame.K_BACKSPACE:
 				self.text = self.text[:-1]
 			else:
@@ -308,7 +328,9 @@ class police():
 
 
 	def txt_draw(self):
-		if self.rect[0]>-200:
+		# print(self.cutscene)		
+		if self.cutscene == True:
+			print("hi")		
 			self.txt_rect1 = self.txt_surface1.get_rect()
 			self.txt_surface1 = self.font.render(self.word, True, self.red)
 			screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
@@ -316,6 +338,16 @@ class police():
 			self.txt_rect = self.txt_surface.get_rect()
 			self.txt_surface = self.font.render(self.text, True, self.color)
 			screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 600))
+				
+		else:
+			if self.rect[0]>-200:
+				self.txt_rect1 = self.txt_surface1.get_rect()
+				self.txt_surface1 = self.font.render(self.word, True, self.red)
+				screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
+
+				self.txt_rect = self.txt_surface.get_rect()
+				self.txt_surface = self.font.render(self.text, True, self.color)
+				screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 600))
 
 	def chase(self,collision):
 		# self.meters_traveled+=self.speed/100
@@ -413,7 +445,6 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 		pygame.display.flip()
 
-
 def pants_president(screen,image):
 	done = False
 	clock = pygame.time.Clock()
@@ -430,24 +461,23 @@ def pants_president(screen,image):
 
 		pygame.display.flip()
 
-
 def running_game(screen):
 	pygame.mixer.music.load("./assets/police_music.mp3")
 	pygame.mixer.music.play(-1,0.0)
 
 	me = player()
-	poop = obstacle()
-	chasers = police(word_list)
+	poop = obstacle(False)
+	chasers = police(word_list,False)
 	# background_1 = background(0,0,5)
 	# background_2 = background(1280,0,5)
 
-	city_back1a = background(0,0,5,"./assets/city_back1.png",False)
-	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True)
+	city_back1a = background(0,0,5,"./assets/city_back1.png",False,False,20)
+	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True,False,20)
 
-	city_back2a = background(0,0,1,"./assets/city_back2.png",False)
-	city_back2b = background(1280,0,1,"./assets/city_back2.png",False)
-	grass = background(0,0,20,"./assets/grass.png",False)
-	grassb = background(1280,0,20,"./assets/grass.png",False)
+	city_back2a = background(0,0,1,"./assets/city_back2.png",False,False,20)
+	city_back2b = background(1280,0,1,"./assets/city_back2.png",False,False,20)
+	grass = background(0,0,20,"./assets/grass.png",False,False,20)
+	grassb = background(1280,0,20,"./assets/grass.png",False,False,20)
 
 
 	clock = pygame.time.Clock()
@@ -456,12 +486,12 @@ def running_game(screen):
 	collision = False
 
 	get_caught = False
-
+	finish_game = False
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				done = True
-			chasers.txt_game(event)
+			finish_game = chasers.txt_game(event)
 
 		# background_1.draw(screen,collision)
 		#  background_2.draw(screen,collision)
@@ -481,7 +511,7 @@ def running_game(screen):
 
 		me.update()
 
-		obstacle_height = poop.render(collision)
+		obstacle_height = poop.render(collision,False)
 		me.leap(collision,obstacle_height)
 
 		chasers.chase(collision)
@@ -510,12 +540,70 @@ def running_game(screen):
 			print("win")
 			done = True
 
+		if finish_game == True:
+			print("skipped")
+			done = True
 		# print(screen)
 		# print(collision)
 		clock.tick(30)
 
 		pygame.display.flip()
 
-# cutscene(screen,1280,720,1280,5,0.1)
 
+
+def steal_donut(screen):
+	me = player()
+	donut = obstacle(True)
+	city_back1a = background(0,0,5,"./assets/city_back1.png",True,True,5)
+	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True,True,5)
+	text_only = police(["steal donut"],True)
+
+	clock = pygame.time.Clock()
+	done = False
+	finish_game = False
+	collision = False
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				done = True
+			finish_game = text_only.txt_game(event)
+
+		screen.fill((255,255,255))
+		city_back1a.draw(screen,collision)
+		player_meters_traveled =city_back1b.draw(screen,collision)
+		stopped = city_back1b.return_stop()
+		me.render(collision)
+		me.update()
+		obstacle_height = donut.render(collision,stopped)
+		me.leap(collision,obstacle_height)
+		me.power_bar(screen)
+
+		text_only.txt_draw()
+		
+
+		if me.rect.colliderect(donut.rect):
+
+			collision = True
+		else:
+			collision = False
+
+		print(finish_game)
+		if finish_game == True:
+			print("skipped")
+			done = True
+
+
+
+		clock.tick(30)
+
+		pygame.display.flip()
+
+
+# cutscene(screen,1280,720,1280,5,0.1)
+steal_donut(screen)
 running_game(screen)
+
+
+
+
+
