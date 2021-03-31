@@ -7,8 +7,11 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 
 
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","apple","banana","orange","grape","ringo","dog","cat","pants","boil","eel"]
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog bark","dance cat","pants","boil","eel",
+"president","police","water","rojo","please","fast","headbutt","frog","baby","music","drive car","horse","apply","adress","money","gambling","addiction",
+"i am dancing","goat","runner"
 
+]
 
 def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
@@ -23,7 +26,7 @@ class player():
 		#images
 		self.images = []
 		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/layer-2.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-2.png').convert_alpha())
 		self.index = 0
 		self.image = self.images[self.index]
 
@@ -134,9 +137,9 @@ class player():
 		elif self.power >= 100:
 			ready_jump = True
 
-		print(ready_jump)
+		# print(ready_jump)
 
-		print(str(self.power))
+		# print(str(self.power))
 
 		# print(self.power)
 	def power_bar(self,screen):
@@ -233,7 +236,7 @@ class police():
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
-		self.rect.x = -200
+		self.rect.x = -50
 		self.rect.y = 250
 
 		self.xchange = 0
@@ -256,6 +259,7 @@ class police():
 
 		self.word_list = word_list
 		self.word = random.choice(self.word_list)
+		self.previous_word = ""
 
 		self.output = ""
 		self.output_store = ""
@@ -276,6 +280,7 @@ class police():
 
 
 	def txt_game(self,event):
+		# print(self.previous_word+" "+self.word)
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
 				self.output = self.text
@@ -285,7 +290,10 @@ class police():
 					self.points +=1
 					
 					if self.txt_cooldown==100:
+
+						self.previous_word = self.word
 						self.word = random.choice(self.word_list)
+
 						print("next")
 
 						self.attack = True
@@ -309,6 +317,10 @@ class police():
 			self.txt_cooldown = 100
 			self.next_word = True
 
+		if self.word == self.previous_word:
+			print("warn")
+			self.word = random.choice(self.word_list)
+
 
 	def txt_draw(self):
 		self.txt_rect1 = self.txt_surface1.get_rect()
@@ -324,7 +336,7 @@ class police():
 		# print(self.meters_traveled)
 			# self.finish_move = True
 		if self.attack ==True:
-			self.rect[0]-=150
+			self.rect[0]-=100
 			self.attack=False
 		else:
 			if collision==True:
@@ -356,6 +368,8 @@ class police():
 
 
 def running_game(screen):
+	pygame.mixer.music.load("./assets/police_music.mp3")
+	pygame.mixer.music.play(-1,0.0)
 
 	me = player()
 	poop = obstacle()
@@ -428,7 +442,7 @@ def running_game(screen):
 			get_caught = False
 
 
-		if player_meters_traveled >= 100:
+		if player_meters_traveled >= 150:
 			print("win")
 			done = True
 
@@ -511,4 +525,4 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 		pygame.display.flip()
 
 cutscene(screen,1280,720,1280,5,0.1)
-running_game(screen)
+# running_game(screen)
