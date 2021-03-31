@@ -566,6 +566,8 @@ def running_game(screen):
 
 
 def steal_donut(screen):
+	pygame.mixer.music.load("./assets/national_anthem.mp3")
+	pygame.mixer.music.play(-1,0.0)
 	me = player()
 	donut = obstacle(True)
 	city_back1a = background(0,0,5,"./assets/city_back1.png",True,True,2)
@@ -582,7 +584,8 @@ def steal_donut(screen):
 				quit()
 			finish_game = text_only.txt_game(event)
 
-		screen.fill((255,255,255))
+		screen.fill((130,206,235))
+
 		city_back1a.draw(screen,collision)
 		player_meters_traveled =city_back1b.draw(screen,collision)
 		stopped = city_back1b.return_stop()
