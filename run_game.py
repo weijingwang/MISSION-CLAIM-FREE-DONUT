@@ -22,8 +22,8 @@ class player():
 
 		#images
 		self.images = []
-		self.images.append(pygame.image.load('player-1.png').convert_alpha())
-		self.images.append(pygame.image.load('player-2.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/layer-2.png').convert_alpha())
 		self.index = 0
 		self.image = self.images[self.index]
 
@@ -154,7 +154,7 @@ class obstacle():
 	"""docstring for obstacle"""
 	def __init__(self):
 
-		self.image = pygame.image.load('apple.png').convert_alpha()
+		self.image = pygame.image.load('./assets/apple.png').convert_alpha()
 		self.rect = self.image.get_rect()
 		self.rect.x = 800
 		self.rect.y = 450
@@ -227,8 +227,8 @@ class police():
 		self.meters_traveled = -5
 
 		self.images = []
-		self.images.append(pygame.image.load('police-1.png').convert_alpha())
-		self.images.append(pygame.image.load('police-2.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/police-1.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/police-2.png').convert_alpha())
 		self.index = 0
 		self.image = self.images[self.index]
 
@@ -284,10 +284,12 @@ class police():
 				if self.output==self.word:
 					self.points +=1
 					
-					self.word = random.choice(self.word_list)
+					if self.txt_cooldown==100:
+						self.word = random.choice(self.word_list)
+						print("next")
 
-					self.attack = True
-					self.txt_cooldown = 0
+						self.attack = True
+						self.txt_cooldown = 0
 					# if police_finished_move == True:
 					# 	self.hit = False
 					# 	print(self.hit)
@@ -361,13 +363,13 @@ def running_game(screen):
 	# background_1 = background(0,0,5)
 	# background_2 = background(1280,0,5)
 
-	city_back1a = background(0,0,5,"city_back1.png",False)
-	player_meters_traveled = city_back1b = background(1280,0,5,"city_back1.png",True)
+	city_back1a = background(0,0,5,"./assets/city_back1.png",False)
+	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True)
 
-	city_back2a = background(0,0,1,"city_back2.png",False)
-	city_back2b = background(1280,0,1,"city_back2.png",False)
-	grass = background(0,0,20,"grass.png",False)
-	grassb = background(1280,0,20,"grass.png",False)
+	city_back2a = background(0,0,1,"./assets/city_back2.png",False)
+	city_back2b = background(1280,0,1,"./assets/city_back2.png",False)
+	grass = background(0,0,20,"./assets/grass.png",False)
+	grassb = background(1280,0,20,"./assets/grass.png",False)
 
 
 	clock = pygame.time.Clock()
@@ -446,10 +448,10 @@ def running_game(screen):
 
 
 
-cutscene_1 = pygame.image.load("cutscene_1.png").convert_alpha()
-cutscene_1text = pygame.image.load("cutscene_1b.png").convert_alpha()
-cutscene_2 = pygame.image.load("cutscene_2.png").convert_alpha()
-cutscene_3 = pygame.image.load("cutscene_3.png").convert_alpha()
+cutscene_1 = pygame.image.load("./assets/cutscene_1.png").convert_alpha()
+cutscene_1text = pygame.image.load("./assets/cutscene_1b.png").convert_alpha()
+cutscene_2 = pygame.image.load("./assets/cutscene_2.png").convert_alpha()
+cutscene_3 = pygame.image.load("./assets/cutscene_3.png").convert_alpha()
 
 width = 1280
 height = 720
@@ -458,7 +460,7 @@ text_x = 1280
 text_speed = 5
 text_accel = 0.1
 def cutscene(screen,width,height,text_x,text_speed,text_accel):
-	pygame.mixer.music.load("national_anthem.mp3")
+	pygame.mixer.music.load("./assets/national_anthem.mp3")
 	pygame.mixer.music.play(-1,0.0)
 	done = False
 	zoom_speed = 0.00001#0.004
@@ -508,5 +510,5 @@ def cutscene(screen,width,height,text_x,text_speed,text_accel):
 
 		pygame.display.flip()
 
-# cutscene(screen,1280,720,1280,5,0.1)
+cutscene(screen,1280,720,1280,5,0.1)
 running_game(screen)
