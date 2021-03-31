@@ -217,7 +217,7 @@ class police():
 	"""docstring for police"""
 	def __init__(self,word_list):
 
-		self.speed = 1
+		self.speed = 2
 		self.meters_traveled = -5
 
 		self.images = []
@@ -227,7 +227,7 @@ class police():
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
-		self.rect.x = -150
+		self.rect.x = -200
 		self.rect.y = 250
 
 		self.xchange = 0
@@ -308,7 +308,7 @@ class police():
 
 
 	def txt_draw(self):
-		if self.rect[0]>-100:
+		if self.rect[0]>-200:
 			self.txt_rect1 = self.txt_surface1.get_rect()
 			self.txt_surface1 = self.font.render(self.word, True, self.red)
 			screen.blit(self.txt_surface1, ((1280/2)-self.txt_rect1[2]/2, 600))
@@ -322,7 +322,7 @@ class police():
 		# print(self.meters_traveled)
 			# self.finish_move = True
 		if self.attack ==True:
-			self.rect[0]-=100
+			self.rect[0]-=200
 			self.attack=False
 		else:
 			if collision==True:
