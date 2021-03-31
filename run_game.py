@@ -154,11 +154,19 @@ class obstacle():
 		self.rect.y = 450
 		self.speed = 20
 
+		
+		self.images = []
+		self.images.append(pygame.image.load('./assets/police-d1.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/police-d2.png').convert_alpha())
+		self.index = 0
+		if is_cutscene==True:
+			self.image = self.images[self.index]
+			self.rect.y = 250
+
+
 		self.is_cutscene = is_cutscene
 		if self.is_cutscene == True:
-			self.rect.x = 2480
-		
-
+			self.rect.x = 1400
 
 	def render(self,collision,is_stopped):
 
@@ -175,6 +183,12 @@ class obstacle():
 		else:
 			self.rect[0] -= 20
 		screen.blit(self.image, self.rect)
+
+	def update(self):
+		self.index += 1
+		if self.index >= len(self.images):
+			self.index = 0
+		self.image = self.images[self.index]
 
 class background():
 	"""docstring for backgro"""
@@ -490,7 +504,7 @@ def running_game(screen):
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				done = True
+				quit()
 			finish_game = chasers.txt_game(event)
 
 		# background_1.draw(screen,collision)
@@ -554,8 +568,8 @@ def running_game(screen):
 def steal_donut(screen):
 	me = player()
 	donut = obstacle(True)
-	city_back1a = background(0,0,5,"./assets/city_back1.png",True,True,5)
-	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True,True,5)
+	city_back1a = background(0,0,5,"./assets/city_back1.png",True,True,2)
+	player_meters_traveled = city_back1b = background(1280,0,5,"./assets/city_back1.png",True,True,2)
 	text_only = police(["steal donut"],True)
 
 	clock = pygame.time.Clock()
@@ -565,7 +579,7 @@ def steal_donut(screen):
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				done = True
+				quit()
 			finish_game = text_only.txt_game(event)
 
 		screen.fill((255,255,255))
@@ -575,6 +589,7 @@ def steal_donut(screen):
 		me.render(collision)
 		me.update()
 		obstacle_height = donut.render(collision,stopped)
+		donut.update()
 		me.leap(collision,obstacle_height)
 		me.power_bar(screen)
 
