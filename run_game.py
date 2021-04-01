@@ -416,6 +416,72 @@ class police():
 			self.index = 0
 		self.image = self.images[self.index]
 
+class story_game():
+	"""docstring for interactive_text"""
+	def __init__(self,text):
+
+
+		self.text = text
+		self.count = 0
+
+		self.current_text_S = self.text[self.count][0]
+		self.current_text = self.text[self.count][1]
+
+		self.font_S = pygame.font.Font(None, 60)
+		self.font = pygame.font.Font(None, 80)
+		self.color = (255,255,255)
+
+
+		self.txt_surface = self.font.render(self.current_text, True, self.color)
+
+		self.txt_rect = self.txt_surface.get_rect()
+		self.txt_x = self.txt_rect[2]#
+
+		self.txt_surface_S = self.font.render(self.current_text_S, True, self.color)
+		self.txt_rect_S = self.txt_surface_S.get_rect()
+		self.txt_x_S = self.txt_rect_S[2]#
+
+		self.backTexture = pygame.image.load("./assets/backTexture.png").convert_alpha()
+
+
+		self.finished = False
+		
+
+	def render_text(self,screen):
+		self.current_text_S = self.text[self.count][0]
+		self.current_text = self.text[self.count][1]
+		screen.fill((255,255,255))
+		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
+		self.txt_rect_S = self.txt_surface_S.get_rect()
+		# print(self.count,self.current_text)
+		self.txt_surface_S = self.font_S.render(self.current_text_S, True, self.color)
+		screen.blit(self.txt_surface_S, ((1280/2)-self.txt_rect_S[2]/2, 580))
+
+		self.txt_rect = self.txt_surface.get_rect()
+		# print(self.count,self.current_text)
+		self.txt_surface = self.font.render(self.current_text, True, self.color)
+		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 640))
+
+
+	def detect_next(self,event):
+
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_SPACE:
+				
+				if (self.count+1) == len(self.text):
+					self.count = self.count
+					self.finished = True
+				print(self.finished)	
+				if self.finished == False:
+					self.count +=1
+					self.current_text = self.text[self.count]
+				elif self.finished==True:
+					self.count = self.count
+					self.finished = True
+		return self.finished
+
+
+
 def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2):
 	pygame.mixer.music.load("./assets/national_anthem.mp3")
 	pygame.mixer.music.play(-1,0.0)
@@ -681,51 +747,26 @@ def open_mystery_file():
 	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
 	f.close()
 
-class story_game():
-	"""docstring for interactive_text"""
-	def __init__(self,text):
 
-
-		self.text = text
-		self.count = 0
-		self.current_text = self.text[self.count]
-
-		self.font = pygame.font.Font(None, 80)
-		self.color = (255,0,0)
-
-		self.txt_surface = self.font.render(self.current_text, True, self.color)
-
-		self.txt_rect = self.txt_surface.get_rect()
-		self.txt_x = self.txt_rect[2]#
-
-		
-
-	def render_text(self,screen):
-		self.txt_rect = self.txt_surface.get_rect()
-		print(self.count,self.current_text)
-		self.txt_surface = self.font.render(self.current_text, True, self.color)
-		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 615))
-	def detect_next(self,event):
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_SPACE:
-				self.count +=1
-				self.current_text = self.text[self.count]
 
 		
 def ending(screen,words):
 	done = False
 	clock = pygame.time.Clock()
-
+	game_done = False
 	test_text = story_game(words)
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit()
-			test_text.detect_next(event)
+			game_done = test_text.detect_next(event)
+
 		screen.fill((0,0,0))
-		pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
+		# pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
 		test_text.render_text(screen)
 
+		if game_done==True:
+			done = True
 
 		clock.tick(30)
 		pygame.display.flip()
@@ -739,6 +780,8 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 "i am dancing","goat","runner","prank","consume"
 ]
 
+ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"]]
+
 cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
 cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
 cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
@@ -746,18 +789,20 @@ lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
 fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
 instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
 
-# title_screen(screen,1280,720,1280,5,0.1,2000,10)
-# steal_donut(screen)
-# intro(screen)
-# result = running_game(screen)
-# if result == True:
-# 	print("YOU WIN")
-# elif result == False:
-# 	print("LOSE")
-# 	open_mystery_file()
-# 	lose_event(screen,lose, fail)
+ending(screen,ending_text)
+title_screen(screen,1280,720,1280,5,0.1,2000,10)
+steal_donut(screen)
+intro(screen)
+result = running_game(screen)
+if result == True:
+	print("YOU WIN")
+	ending(screen,ending_text)
+elif result == False:
+	print("LOSE")
+	open_mystery_file()
+	lose_event(screen,lose, fail)
 
-ending(screen,word_list)
+
 
 
 
