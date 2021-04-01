@@ -21,15 +21,32 @@ class player():
 		# self.image = pygame.Surface([100, 400])
 
 		#images
+
 		self.images = []
-		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-2.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-3.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-4.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-4.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-3.png').convert_alpha())
-		self.images.append(pygame.image.load('./assets/player-2.png').convert_alpha())
+		self.imagesR = []
+		self.imagesR.append(pygame.image.load('./assets/player-1.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-1.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-2.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-3.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-4.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-4.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-3.png').convert_alpha())
+		self.imagesR.append(pygame.image.load('./assets/player-2.png').convert_alpha())
+
+		self.imagesL = []
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-1.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-1.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-2.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-3.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-4.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-4.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-3.png').convert_alpha(), True, False))
+		self.imagesL.append(pygame.transform.flip(pygame.image.load('./assets/player-2.png').convert_alpha(), True, False))
+
+		self.images = self.imagesR
+		self.facing_right = True
+
+
 
 		self.index = 0
 		self.image = self.images[self.index]
@@ -59,6 +76,7 @@ class player():
 
 		self.active_color = (0,255,255)
 
+
 	def render(self,collision):
 		pressed = pygame.key.get_pressed()
 		# if pressed[pygame.K_UP]: self.rect[1] -= self.speed_y
@@ -72,8 +90,12 @@ class player():
 			self.rect[0] = 0
 			self.rect[0]+=10
 		else:
-			if pressed[pygame.K_LEFT]: self.rect[0] -= self.speed_x
-			if pressed[pygame.K_RIGHT]: self.rect[0] += self.speed_x
+			if pressed[pygame.K_LEFT]:
+				self.rect[0] -= self.speed_x
+				self.facing_right = False
+			if pressed[pygame.K_RIGHT]:
+				self.rect[0] += self.speed_x
+				self.facing_right = True
 
 		if collision ==True:
 			# self.rect.x+=1
@@ -93,6 +115,10 @@ class player():
 		if self.index >= len(self.images):
 			self.index = 0
 		self.image = self.images[self.index]
+		if self.facing_right == True:
+			self.images = self.imagesR
+		elif self.facing_right == False:
+			self.images = self.imagesL
 
 	def leap(self,collision,obstacle_height):
 		pressed = pygame.key.get_pressed()
