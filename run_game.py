@@ -4,17 +4,6 @@ pygame.mixer.pre_init()
 pygame.init()
 pygame.display.set_caption("MISSION: CLAIM FREE DONUT (pyweek 31)")
 
-def displayText(surface,message,x,y,size,r,g,b):
-	myfont = pygame.font.Font(None,size)
-	textImage = myfont.render(message, True, (r,g,b))
-	surface.blit(textImage,(x,y))
-
-def open_mystery_file():
-	print("look at mystery_file.txt for help (cheats)")
-	f = open("mystery_file.txt", "w")
-	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
-	f.close()
-
 class player():
 	"""docstring for player"""
 	def __init__(self):
@@ -427,33 +416,6 @@ class police():
 			self.index = 0
 		self.image = self.images[self.index]
 
-
-screen = pygame.display.set_mode((1280, 720))
-
-
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
-"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
-"i am dancing","goat","runner","prank","consume"
-]
-
-
-cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
-cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
-cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
-lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
-fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
-# cutscene_2 = pygame.image.load("./assets/cutscene_2.png").convert_alpha()
-# cutscene_3 = pygame.image.load("./assets/cutscene_3.png").convert_alpha()
-
-width = 1280
-height = 720
-
-text_x = 1280
-text_x2 = 2000
-
-text_speed = 5
-text_speed1 = 5
-text_accel = 0.1
 def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2):
 	pygame.mixer.music.load("./assets/national_anthem.mp3")
 	pygame.mixer.music.play(-1,0.0)
@@ -593,8 +555,6 @@ def running_game(screen):
 
 		pygame.display.flip()
 
-
-instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
 def steal_donut(screen):
 	me = player()
 	donut = obstacle(True)
@@ -643,8 +603,6 @@ def steal_donut(screen):
 
 		pygame.display.flip()
 
-
-
 def lose_event(screen,image,image2):
 	pygame.mixer.music.load("./assets/lose.mp3")
 	pygame.mixer.music.play(-1,0.0)
@@ -663,9 +621,6 @@ def lose_event(screen,image,image2):
 		screen.blit(image2,(0+random_num1,676+random_num2))
 		clock.tick(30)
 		pygame.display.flip()
-
-
-
 
 def intro(screen):
 	pygame.mixer.music.load("./assets/police_music.mp3")
@@ -715,21 +670,72 @@ def intro(screen):
 		clock.tick(12)
 		pygame.display.flip()
 
+def displayText(surface,message,x,y,size,r,g,b):
+	myfont = pygame.font.Font(None,size)
+	textImage = myfont.render(message, True, (r,g,b))
+	surface.blit(textImage,(x,y))
+
+def open_mystery_file():
+	print("look at mystery_file.txt for help (cheats)")
+	f = open("mystery_file.txt", "w")
+	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
+	f.close()
+
+class story_game():
+	"""docstring for interactive_text"""
+	def __init__(self):
+		self.text = "hello this\n is a text"
+	def render_text(self,screen):
+		displayText(screen,self.text,500,300,50,255,255,255)
+		
+def ending(screen):
+	done = False
+	clock = pygame.time.Clock()
+
+	test_text = story_game()
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+			# if event.type == pygame.KEYDOWN:
+			# 	if event.key == pygame.K_SPACE:
+			# 		done= True
+		screen.fill((0,0,0))
+
+		test_text.render_text(screen)
+
+
+		clock.tick(30)
+		pygame.display.flip()
 
 
 
-title_screen(screen,1280,720,1280,5,0.1,2000,10)
-steal_donut(screen)
-intro(screen)
-result = running_game(screen)
-if result == True:
-	print("YOU WIN")
-elif result == False:
-	print("LOSE")
-	open_mystery_file()
-	lose_event(screen,lose, fail)
+screen = pygame.display.set_mode((1280, 720))
 
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
+"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
+"i am dancing","goat","runner","prank","consume"
+]
 
+cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
+cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
+cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
+lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
+fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
+instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
+
+# title_screen(screen,1280,720,1280,5,0.1,2000,10)
+# steal_donut(screen)
+# intro(screen)
+# result = running_game(screen)
+# if result == True:
+# 	print("YOU WIN")
+# elif result == False:
+# 	print("LOSE")
+# 	open_mystery_file()
+# 	lose_event(screen,lose, fail)
+
+ending(screen)
 
 
 
