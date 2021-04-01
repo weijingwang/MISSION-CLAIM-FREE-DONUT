@@ -684,9 +684,19 @@ def open_mystery_file():
 class story_game():
 	"""docstring for interactive_text"""
 	def __init__(self):
-		self.text = "hello this\n is a text"
+		self.text = "hello this\n is a textasdfsadfasdfafsfasdf"
+		self.font = pygame.font.Font(None, 80)
+		self.color = (255,0,0)
+
+		self.txt_surface = self.font.render(self.text, True, self.color)
+
+		self.txt_rect = self.txt_surface.get_rect()
+		self.txt_x = self.txt_rect[2]#
+
 	def render_text(self,screen):
-		displayText(screen,self.text,500,300,50,255,255,255)
+		self.txt_rect = self.txt_surface.get_rect()
+		self.txt_surface = self.font.render(self.text, True, self.color)
+		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 615))
 		
 def ending(screen):
 	done = False
@@ -701,7 +711,7 @@ def ending(screen):
 			# 	if event.key == pygame.K_SPACE:
 			# 		done= True
 		screen.fill((0,0,0))
-
+		pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
 		test_text.render_text(screen)
 
 
