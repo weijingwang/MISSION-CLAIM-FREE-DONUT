@@ -10,7 +10,7 @@ def displayText(surface,message,x,y,size,r,g,b):
 	surface.blit(textImage,(x,y))
 
 def open_mystery_file():
-	print("look at mystery_file.txt")
+	print("look at mystery_file.txt for help (cheats)")
 	f = open("mystery_file.txt", "w")
 	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
 	f.close()
@@ -239,8 +239,8 @@ class background():
 		if self.score_counter == True:
 			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
 			self.meters_traveled+=self.scroll_speed/100
-
-			displayText(screen,"/100 meters",1000,75,30,255,0,0)
+			if self.is_cutscene == False:
+				displayText(screen,"/100 meters",1000,75,30,255,0,0)
 			return self.meters_traveled
 
 	def return_stop(self):
@@ -375,7 +375,7 @@ class police():
 		# print(self.meters_traveled)
 			# self.finish_move = True
 		if self.attack ==True:
-			self.rect[0]-=200
+			self.rect[0]-=165
 			self.attack=False
 		else:
 			if collision==True:
@@ -677,7 +677,7 @@ def intro(screen):
 		
 		alphaSurface.set_alpha(alph)
 		screen.blit(alphaSurface,(0,0))
-		print(timer,count)
+		# print(timer,count)
 		clock.tick(12)
 		pygame.display.flip()
 
