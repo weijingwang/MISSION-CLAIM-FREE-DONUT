@@ -683,33 +683,45 @@ def open_mystery_file():
 
 class story_game():
 	"""docstring for interactive_text"""
-	def __init__(self):
-		self.text = "hello this\n is a textasdfsadfasdfafsfasdf"
+	def __init__(self,text):
+
+
+		self.text = text
+		self.count = 0
+		self.current_text = self.text[self.count]
+
 		self.font = pygame.font.Font(None, 80)
 		self.color = (255,0,0)
 
-		self.txt_surface = self.font.render(self.text, True, self.color)
+		self.txt_surface = self.font.render(self.current_text, True, self.color)
 
 		self.txt_rect = self.txt_surface.get_rect()
 		self.txt_x = self.txt_rect[2]#
 
+		
+
 	def render_text(self,screen):
 		self.txt_rect = self.txt_surface.get_rect()
-		self.txt_surface = self.font.render(self.text, True, self.color)
+		print(self.count,self.current_text)
+		self.txt_surface = self.font.render(self.current_text, True, self.color)
 		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 615))
+	def detect_next(self,event):
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_SPACE:
+				self.count +=1
+				self.current_text = self.text[self.count]
+
 		
-def ending(screen):
+def ending(screen,words):
 	done = False
 	clock = pygame.time.Clock()
 
-	test_text = story_game()
+	test_text = story_game(words)
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit()
-			# if event.type == pygame.KEYDOWN:
-			# 	if event.key == pygame.K_SPACE:
-			# 		done= True
+			test_text.detect_next(event)
 		screen.fill((0,0,0))
 		pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
 		test_text.render_text(screen)
@@ -745,7 +757,7 @@ instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
 # 	open_mystery_file()
 # 	lose_event(screen,lose, fail)
 
-ending(screen)
+ending(screen,word_list)
 
 
 
