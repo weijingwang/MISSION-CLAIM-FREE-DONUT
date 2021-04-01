@@ -23,20 +23,27 @@ class player():
 		#images
 		self.images = []
 		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-1.png').convert_alpha())
 		self.images.append(pygame.image.load('./assets/player-2.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-3.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-4.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-4.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-3.png').convert_alpha())
+		self.images.append(pygame.image.load('./assets/player-2.png').convert_alpha())
+
 		self.index = 0
 		self.image = self.images[self.index]
 
 		self.rect = self.image.get_rect()
 		self.rect.x = 200
-		self.rect.y = 250
+		self.rect.y = 402
 
 		# self.image.fill((255, 0, 0))
 
 		self.speed_x=20
 
 
-		self.floor = 250
+		self.floor = 402
 
 
 		self.jump = False
@@ -504,7 +511,7 @@ def running_game(screen):
 		# background_1.draw(screen,collision)
 		#  background_2.draw(screen,collision)
 		
-		screen.fill((50,50,50))
+		screen.fill((130,206,235))
 
 		city_back2a.draw(screen,collision)
 		city_back2b.draw(screen,collision)
