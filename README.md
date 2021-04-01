@@ -12,6 +12,6 @@ This is a game created for pyweek31. The theme was COPS. Art,code and music by s
 type the words you see on the screen and press enter. Use the arrow keys to avoid any obstacles and do not touch the cop!
 Every time you get a word right, the cop's position will be set back. This way, you can avoid getting caught.
 
-REQUIREMENTS:
+## REQUIREMENTS:
 
 pygame and python3
