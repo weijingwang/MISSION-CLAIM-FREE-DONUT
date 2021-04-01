@@ -4,9 +4,13 @@ This is a game created for pyweek31. The theme was COPS. Art,code and music by s
 MISSION: CLAIM FREE DONUT tells the story of an mischevious child who steals a police officer's donut as he is about to take a bite. The child must give his all to escape the officer's pursuit.
 
 Controls:
+
 Up arrow : JUMP
+
 Left arrow: LEFT
+
 Right arrow: RIGHT
+
 
 HOW TO PLAY:
 
