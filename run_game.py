@@ -151,8 +151,6 @@ class player():
 		pygame.draw.rect(screen, (255,0,0), pygame.Rect(50, 25, 500, 5))
 		pygame.draw.rect(screen, self.active_color, pygame.Rect(50, 25, 500*(self.power/100), 5))
 
-
-
 class obstacle():
 	"""docstring for obstacle"""
 	def __init__(self,is_cutscene):
@@ -241,6 +239,8 @@ class background():
 		if self.score_counter == True:
 			displayText(screen,str("%.2f"%self.meters_traveled)+" meters",1000,25,60,255,0,0)
 			self.meters_traveled+=self.scroll_speed/100
+
+			displayText(screen,"/100 meters",1000,75,30,255,0,0)
 			return self.meters_traveled
 
 	def return_stop(self):
@@ -472,9 +472,6 @@ def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_s
 		pygame.display.flip()
 
 def running_game(screen):
-	pygame.mixer.music.load("./assets/police_music.mp3")
-	pygame.mixer.music.play(-1,0.0)
-
 	me = player()
 	poop = obstacle(False)
 	chasers = police(word_list,False)
@@ -634,8 +631,61 @@ def lose_event(screen,image,image2):
 		pygame.display.flip()
 
 
+
+
+def intro(screen):
+	pygame.mixer.music.load("./assets/police_music.mp3")
+	pygame.mixer.music.play(-1,0.0)
+	scene1 = pygame.image.load("./assets/scene1.png").convert_alpha()
+	scene2 = pygame.image.load("./assets/scene2.png").convert_alpha()
+	scene3 = pygame.image.load("./assets/scene3.png").convert_alpha()
+
+	scene = scene1
+
+	done = False
+	clock = pygame.time.Clock()
+	timer = 0
+	count = 0
+	alphaSurface = pygame.Surface((1280,720)) # The custom-surface of the size of the screen.
+	alphaSurface.fill((0,0,0))
+	alphaSurface.set_alpha(0) # Set alpha to 0 before the main-loop. 
+	alph = 0 # The increment-variable.
+	while not done:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					done= True
+
+		screen.blit(scene,(0,0))
+
+
+		if timer>=0:
+			scene = scene1
+			if timer >=6:
+				scene=scene2
+				if timer>=24:
+					scene = scene3
+					if timer>=36:
+						alph += 20
+						if alph >= 480:
+							done=True
+
+		timer +=1
+
+		
+		alphaSurface.set_alpha(alph)
+		screen.blit(alphaSurface,(0,0))
+		print(timer,count)
+		clock.tick(12)
+		pygame.display.flip()
+
+
+
 title_screen(screen,1280,720,1280,5,0.1,2000,10)
 steal_donut(screen)
+intro(screen)
 result = running_game(screen)
 if result == True:
 	print("YOU WIN")
