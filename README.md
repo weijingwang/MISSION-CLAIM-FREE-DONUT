@@ -1,5 +1,5 @@
-# pyweek31
-This is a game created for pyweek31. The theme was COPS.
+# MISSION: CLAIM FREE DONUT
+This is a game created for pyweek31. The theme was COPS. Art,code and music by speedlimit35 (me).
 
 MISSION: CLAIM FREE DONUT tells the story of an mischevious child who steals a police officer's donut as he is about to take a bite. The child must give his all to escape the officer's pursuit.
 
