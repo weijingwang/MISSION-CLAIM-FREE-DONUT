@@ -555,6 +555,7 @@ def running_game(screen):
 		if player_meters_traveled >= 100:
 			print("win")
 			win = True
+			pygame.mixer.fadeout(1000)# does this work??????
 			return win	
 
 		if finish_game == True:
@@ -687,6 +688,7 @@ def intro(screen):
 		# print(timer,count)
 		clock.tick(12)
 		pygame.display.flip()
+
 
 
 
