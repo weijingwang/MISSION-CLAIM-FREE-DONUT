@@ -418,7 +418,7 @@ class police():
 
 class story_game():
 	"""docstring for interactive_text"""
-	def __init__(self,text):
+	def __init__(self,text,images):
 		self.count = 0
 
 		self.font_S = pygame.font.Font(None, 60)
@@ -447,6 +447,10 @@ class story_game():
 
 		self.set_time_interval = 2 *30
 
+
+		self.images = images
+		self.image = images[self.count]
+
 	def render_text(self,screen):
 		self.current_text = self.text[self.count][1]
 		self.current_text_S = self.text[self.count][0]
@@ -456,8 +460,9 @@ class story_game():
 		self.txt_surface = self.font.render(self.current_text, True, self.color)
 		self.txt_surface_S = self.font_S.render(self.current_text_S, True, self.color)
 
+		screen.blit(self.image,(0,0))
 		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
-		print(self.count,self.current_text)
+		print(self.count,self.current_text,self.image)
 		screen.blit(self.txt_surface_S, (100, 580))#(1280/2)-self.txt_rect[2]/2
 		screen.blit(self.txt_surface, (50, 640))
 
@@ -756,11 +761,11 @@ def open_mystery_file():
 	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
 	f.close()
 		
-def ending(screen,words):
+def ending(screen,words,images):
 	done = False
 	clock = pygame.time.Clock()
 	game_done = False
-	test_text = story_game(words)
+	test_text = story_game(words,images)
 	while not done:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -780,21 +785,24 @@ def ending(screen,words):
 
 screen = pygame.display.set_mode((1280, 720))
 
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
-"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
-"i am dancing","goat","runner","prank","consume"
-]
-
-ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"]]
-
 cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
 cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
 cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
 lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
 fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
 instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
+scene4 = pygame.image.load("./assets/scene4.png").convert_alpha()
+scene5 = pygame.image.load("./assets/scene5.png").convert_alpha()
 
-ending(screen,ending_text)
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
+"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
+"i am dancing","goat","runner","prank","consume"
+]
+
+ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"]]
+ending_images = [scene4,scene5]
+
+ending(screen,ending_text,ending_images)
 # title_screen(screen,1280,720,1280,5,0.1,2000,10)
 # steal_donut(screen)
 # intro(screen)
