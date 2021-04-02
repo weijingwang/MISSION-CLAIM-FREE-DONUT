@@ -821,6 +821,7 @@ scene7 = pygame.image.load("./assets/scene7.png").convert_alpha()
 scene8 = pygame.image.load("./assets/scene8.png").convert_alpha()
 scene9 = pygame.image.load("./assets/scene9.png").convert_alpha()
 scene10 = pygame.image.load("./assets/scene10.png").convert_alpha()
+scene10_grey = pygame.image.load("./assets/scene10_grey.png").convert_alpha()
 
 word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
 "smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
@@ -833,6 +834,8 @@ ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8]
 
 title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
 ending(screen,ending_text,ending_images)
+title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/end_demo.mp3",scene10_grey,title_text1,titletext2)#song,background,image1, image2
+
 # steal_donut(screen)
 # intro(screen)
 # result = running_game(screen)
