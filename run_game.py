@@ -419,15 +419,16 @@ class police():
 class story_game():
 	"""docstring for interactive_text"""
 	def __init__(self,text,images):
-		self.count = 0
+		self.count_text = 0
+		self.count_image = 0
 
 		self.font_S = pygame.font.Font(None, 60)
 		self.font = pygame.font.Font(None, 80)
 		self.color = (255,255,255)
 
 		self.text = text
-		self.current_text = self.text[self.count][1]
-		self.current_text_S = self.text[self.count][0]
+		self.current_text = self.text[self.count_text][1]
+		self.current_text_S = self.text[self.count_text][0]
 		self.txt_surface = self.font.render(self.current_text, True, self.color)
 		self.txt_surface_S = self.font.render(self.current_text_S, True, self.color)
 		self.txt_rect = self.txt_surface.get_rect()
@@ -442,19 +443,21 @@ class story_game():
 
 		self.next_scene = False
 
-		self.timer = 0
+		self.images = images
+		self.image = images[self.count_image]
+
+		self.timer_text = 0
+		self.timer_images = 0
 		self.clock = pygame.time.Clock()
 
-		self.set_time_interval = 2 *30
-
-
-		self.images = images
-		self.image = images[self.count]
+		self.time_text = self.text[self.count_text][2] *30
+		# self.time_images =self.images[self.count_image][1]*30
 
 	def render_text(self,screen):
-		self.current_text = self.text[self.count][1]
-		self.current_text_S = self.text[self.count][0]
-		self.image = self.images[self.count]
+		self.time_text = self.text[self.count_text][2] *30
+		self.current_text = self.text[self.count_text][1]
+		self.current_text_S = self.text[self.count_text][0]
+		self.image = self.images[self.count_text]
 		
 		self.txt_rect = self.txt_surface.get_rect()
 		self.txt_rect_S = self.txt_surface_S.get_rect()
@@ -463,16 +466,18 @@ class story_game():
 
 		screen.blit(self.image,(0,0))
 		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
-		print(self.count,self.current_text,self.image)
+		print(self.count_text,self.current_text,self.image)
 		screen.blit(self.txt_surface_S, (100, 580))#(1280/2)-self.txt_rect[2]/2
 		screen.blit(self.txt_surface, (50, 640))
 
+		print(self.time_text)
 
-		self.timer+=1
 
-		if self.timer >= self.set_time_interval:
+		self.timer_text+=1
+
+		if self.timer_text >= self.time_text:
 			self.next_scene = True
-			self.timer = 0
+			self.timer_text = 0
 		else:
 			self.next_scene = False
 
@@ -485,15 +490,15 @@ class story_game():
 	def detect_next(self):
 
 		if self.next_scene == True:
-			if (self.count+1) == len(self.text):
-				self.count = self.count
+			if (self.count_text+1) == len(self.text):
+				self.count_text = self.count_text
 				self.finished = True
 			print(self.finished)
 			if self.finished == False:
-				self.count +=1
-				self.current_text = self.text[self.count]
+				self.count_text +=1
+				self.current_text = self.text[self.count_text]
 			elif self.finished==True:
-				self.count = self.count
+				self.count_text = self.count_text
 				self.finished = True
 		return self.finished
 
@@ -805,7 +810,7 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 "i am dancing","goat","runner","prank","consume"
 ]
 
-ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"],["","MISSION ACCOMPLISHED"]]
+ending_text = [["","",2],["cop","*gasp heh u are a quick one... kid *huff huff",4],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",3],["kid","*wolfs down donut and scratches chin",3],["","MISSION ACCOMPLISHED",10]]
 ending_images = [scene4,scene5,scene6,scene7,scene8,scene9,scene10]
 
 ending(screen,ending_text,ending_images)
