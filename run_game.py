@@ -419,68 +419,77 @@ class police():
 class story_game():
 	"""docstring for interactive_text"""
 	def __init__(self,text):
-
-
-		self.text = text
 		self.count = 0
-
-		self.current_text_S = self.text[self.count][0]
-		self.current_text = self.text[self.count][1]
 
 		self.font_S = pygame.font.Font(None, 60)
 		self.font = pygame.font.Font(None, 80)
 		self.color = (255,255,255)
 
-
+		self.text = text
+		self.current_text = self.text[self.count][1]
+		self.current_text_S = self.text[self.count][0]
 		self.txt_surface = self.font.render(self.current_text, True, self.color)
-
-		self.txt_rect = self.txt_surface.get_rect()
-		self.txt_x = self.txt_rect[2]#
-
 		self.txt_surface_S = self.font.render(self.current_text_S, True, self.color)
+		self.txt_rect = self.txt_surface.get_rect()
 		self.txt_rect_S = self.txt_surface_S.get_rect()
+		self.txt_x = self.txt_rect[2]#
 		self.txt_x_S = self.txt_rect_S[2]#
+		
 
 		self.backTexture = pygame.image.load("./assets/backTexture.png").convert_alpha()
 
-
 		self.finished = False
-		
+
+		self.next_scene = False
+
+		self.timer = 0
+		self.clock = pygame.time.Clock()
+
+		self.set_time_interval = 2 *30
 
 	def render_text(self,screen):
-		self.current_text_S = self.text[self.count][0]
 		self.current_text = self.text[self.count][1]
-		screen.fill((255,255,255))
-		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
-		self.txt_rect_S = self.txt_surface_S.get_rect()
-		# print(self.count,self.current_text)
-		self.txt_surface_S = self.font_S.render(self.current_text_S, True, self.color)
-		screen.blit(self.txt_surface_S, ((1280/2)-self.txt_rect_S[2]/2, 580))
-
+		self.current_text_S = self.text[self.count][0]
+		
 		self.txt_rect = self.txt_surface.get_rect()
-		# print(self.count,self.current_text)
+		self.txt_rect_S = self.txt_surface_S.get_rect()
 		self.txt_surface = self.font.render(self.current_text, True, self.color)
-		screen.blit(self.txt_surface, ((1280/2)-self.txt_rect[2]/2, 640))
+		self.txt_surface_S = self.font_S.render(self.current_text_S, True, self.color)
+
+		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
+		print(self.count,self.current_text)
+		screen.blit(self.txt_surface_S, (100, 580))#(1280/2)-self.txt_rect[2]/2
+		screen.blit(self.txt_surface, (50, 640))
 
 
-	def detect_next(self,event):
+		self.timer+=1
 
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_SPACE:
-				
-				if (self.count+1) == len(self.text):
-					self.count = self.count
-					self.finished = True
-				print(self.finished)	
-				if self.finished == False:
-					self.count +=1
-					self.current_text = self.text[self.count]
-				elif self.finished==True:
-					self.count = self.count
-					self.finished = True
+		if self.timer >= self.set_time_interval:
+			self.next_scene = True
+			self.timer = 0
+		else:
+			self.next_scene = False
+
+		self.clock.tick(30)
+
+
+		pygame.display.flip()
+
+
+	def detect_next(self):
+
+		if self.next_scene == True:
+			if (self.count+1) == len(self.text):
+				self.count = self.count
+				self.finished = True
+			print(self.finished)
+			if self.finished == False:
+				self.count +=1
+				self.current_text = self.text[self.count]
+			elif self.finished==True:
+				self.count = self.count
+				self.finished = True
 		return self.finished
-
-
 
 def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2):
 	pygame.mixer.music.load("./assets/national_anthem.mp3")
@@ -746,9 +755,6 @@ def open_mystery_file():
 	f = open("mystery_file.txt", "w")
 	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
 	f.close()
-
-
-
 		
 def ending(screen,words):
 	done = False
@@ -759,17 +765,16 @@ def ending(screen,words):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit()
-			game_done = test_text.detect_next(event)
+			
 
 		screen.fill((0,0,0))
 		# pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
+		game_done = test_text.detect_next()
 		test_text.render_text(screen)
 
 		if game_done==True:
 			done = True
 
-		clock.tick(30)
-		pygame.display.flip()
 
 
 
@@ -790,17 +795,17 @@ fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
 instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
 
 ending(screen,ending_text)
-title_screen(screen,1280,720,1280,5,0.1,2000,10)
-steal_donut(screen)
-intro(screen)
-result = running_game(screen)
-if result == True:
-	print("YOU WIN")
-	ending(screen,ending_text)
-elif result == False:
-	print("LOSE")
-	open_mystery_file()
-	lose_event(screen,lose, fail)
+# title_screen(screen,1280,720,1280,5,0.1,2000,10)
+# steal_donut(screen)
+# intro(screen)
+# result = running_game(screen)
+# if result == True:
+# 	print("YOU WIN")
+# 	ending(screen,ending_text)
+# elif result == False:
+# 	print("LOSE")
+# 	open_mystery_file()
+# 	lose_event(screen,lose, fail)
 
 
 
