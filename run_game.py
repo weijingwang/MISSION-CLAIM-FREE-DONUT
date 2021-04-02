@@ -517,8 +517,8 @@ class story_game():
 				self.finished = True
 		return self.finished
 
-def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2):
-	pygame.mixer.music.load("./assets/national_anthem.mp3")
+def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_speed2,song,background,image1, image2):
+	pygame.mixer.music.load(song)
 	pygame.mixer.music.play(-1,0.0)
 	done = False
 	zoom_speed = 0.00001#0.004
@@ -539,9 +539,9 @@ def title_screen(screen,width,height,text_x,text_speed,text_accel,text_x2,text_s
 		x=((1280/2)-(width/2))		
 		y=((720/2)-(height/2))
 
-		screen.blit(pygame.transform.scale(cutscene_1,(width,height)),(x,y))
-		screen.blit(cutscene_1text,(text_x,30))#380
-		screen.blit(cutscene_1text1,(text_x2,620))#380
+		screen.blit(pygame.transform.scale(background,(width,height)),(x,y))
+		screen.blit(image1,(text_x,30))#380
+		screen.blit(image2,(text_x2,620))#380
 
 		width+=int(width*zoom_speed)
 		height+=int(height*zoom_speed)
@@ -805,11 +805,12 @@ def ending(screen,words,images):
 
 
 
+
 screen = pygame.display.set_mode((1280, 720))
 
-cutscene_1 = pygame.image.load("./assets/title.png").convert_alpha()
-cutscene_1text = pygame.image.load("./assets/mission.png").convert_alpha()
-cutscene_1text1 = pygame.image.load("./assets/accept.png").convert_alpha()
+title = pygame.image.load("./assets/title.png").convert_alpha()
+title_text1 = pygame.image.load("./assets/mission.png").convert_alpha()
+titletext2 = pygame.image.load("./assets/accept.png").convert_alpha()
 lose = pygame.image.load("./assets/lose.jpg").convert_alpha()
 fail = pygame.image.load("./assets/mission_fail.png").convert_alpha()
 instructions = pygame.image.load("./assets/instructions.png").convert_alpha()
@@ -826,11 +827,12 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 "i am dancing","goat","runner","prank","consume"
 ]
 
-ending_text = [["","",2],["cop","*gasp heh u are a quick one... kid *huff huff",3],["kid","mmm this is one tasty donut",3],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",2.5],["","MISSION ACCOMPLISHED",10]]
+ending_text = [["","",2],["cop","*gasp heh u are a quick one... kid *huff huff",5],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",4],["","MISSION ACCOMPLISHED",5]]
 ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8],[scene7,scene8],[scene9,scene9],[scene10,scene10]]
 
+
+title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
 ending(screen,ending_text,ending_images)
-# title_screen(screen,1280,720,1280,5,0.1,2000,10)
 # steal_donut(screen)
 # intro(screen)
 # result = running_game(screen)
