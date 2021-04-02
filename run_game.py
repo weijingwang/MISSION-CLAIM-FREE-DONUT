@@ -805,7 +805,7 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 "i am dancing","goat","runner","prank","consume"
 ]
 
-ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"]]
+ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"],["","MISSION ACCOMPLISHED"]]
 ending_images = [scene4,scene5,scene6,scene7,scene8,scene9,scene10]
 
 ending(screen,ending_text,ending_images)
