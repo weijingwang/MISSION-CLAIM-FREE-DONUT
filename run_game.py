@@ -420,7 +420,8 @@ class story_game():
 	"""docstring for interactive_text"""
 	def __init__(self,text,images):
 		self.count_text = 0
-		self.count_image = 0
+		self.index = 0
+		# self.count_image = 0
 
 		self.font_S = pygame.font.Font(None, 60)
 		self.font = pygame.font.Font(None, 80)
@@ -444,17 +445,24 @@ class story_game():
 		self.next_scene = False
 
 		self.images = images
-		self.image = images[self.count_image]
+		self.image = self.images[self.count_text]
+		self.current_image = self.image[self.index]
 
 		self.timer_text = 0
-		self.timer_images = 0
+		# self.timer_images = 0
 		self.clock = pygame.time.Clock()
 
-		self.time_text = self.text[self.count_text][2] *30
+		self.time_text = self.text[self.count_text][2] *15
 		# self.time_images =self.images[self.count_image][1]*30
 
+		
+
 	def render_text(self,screen):
-		self.time_text = self.text[self.count_text][2] *30
+		self.image = self.images[self.count_text]
+		self.current_image = self.image[self.index]		
+
+
+		self.time_text = self.text[self.count_text][2] *15
 		self.current_text = self.text[self.count_text][1]
 		self.current_text_S = self.text[self.count_text][0]
 		self.image = self.images[self.count_text]
@@ -464,7 +472,7 @@ class story_game():
 		self.txt_surface = self.font.render(self.current_text, True, self.color)
 		self.txt_surface_S = self.font_S.render(self.current_text_S, True, self.color)
 
-		screen.blit(self.image,(0,0))
+		screen.blit(self.current_image,(0,0))
 		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
 		print(self.count_text,self.current_text,self.image)
 		screen.blit(self.txt_surface_S, (100, 580))#(1280/2)-self.txt_rect[2]/2
@@ -481,10 +489,17 @@ class story_game():
 		else:
 			self.next_scene = False
 
-		self.clock.tick(30)
+		self.clock.tick(15)
 
 
 		pygame.display.flip()
+
+	def update(self):
+		print(self.current_image)
+		self.index += 1
+		if self.index >= len(self.image):
+			self.index = 0
+		self.current_image = self.image[self.index]
 
 
 	def detect_next(self):
@@ -782,6 +797,7 @@ def ending(screen,words,images):
 		# pygame.draw.rect(screen,(100,100,100),(0,570,1280,150))
 		game_done = test_text.detect_next()
 		test_text.render_text(screen)
+		test_text.update()
 
 		if game_done==True:
 			done = True
@@ -810,8 +826,8 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 "i am dancing","goat","runner","prank","consume"
 ]
 
-ending_text = [["","",2],["cop","*gasp heh u are a quick one... kid *huff huff",4],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",3],["kid","*wolfs down donut and scratches chin",3],["","MISSION ACCOMPLISHED",10]]
-ending_images = [scene4,scene5,scene6,scene7,scene8,scene9,scene10]
+ending_text = [["","",2],["cop","*gasp heh u are a quick one... kid *huff huff",3],["kid","mmm this is one tasty donut",3],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",2.5],["","MISSION ACCOMPLISHED",10]]
+ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8],[scene7,scene8],[scene9,scene9],[scene10,scene10]]
 
 ending(screen,ending_text,ending_images)
 # title_screen(screen,1280,720,1280,5,0.1,2000,10)
