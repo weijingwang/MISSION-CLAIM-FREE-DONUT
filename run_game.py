@@ -798,6 +798,7 @@ scene6 = pygame.image.load("./assets/scene6.png").convert_alpha()
 scene7 = pygame.image.load("./assets/scene7.png").convert_alpha()
 scene8 = pygame.image.load("./assets/scene8.png").convert_alpha()
 scene9 = pygame.image.load("./assets/scene9.png").convert_alpha()
+scene10 = pygame.image.load("./assets/scene10.png").convert_alpha()
 
 word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
 "smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
@@ -805,7 +806,7 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 ]
 
 ending_text = [["cop","*gasp heh u are a quick one... kid *huff huff"],["kid","mmm this is one tasty donut"],["kid","*aggressively munches on donut"],["cop","............."],["kid","*wolfs down donut and scratches chin"]]
-ending_images = [scene4,scene5,scene6,scene7,scene8,scene9]
+ending_images = [scene4,scene5,scene6,scene7,scene8,scene9,scene10]
 
 ending(screen,ending_text,ending_images)
 # title_screen(screen,1280,720,1280,5,0.1,2000,10)
