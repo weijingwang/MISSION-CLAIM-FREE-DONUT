@@ -705,7 +705,7 @@ def steal_donut(screen):
 		pygame.display.flip()
 
 def lose_event(screen,image,image2):
-	pygame.mixer.music.load("./assets/music/lose.mp3")
+	pygame.mixer.music.load("./assets/music/lose.ogg")
 	pygame.mixer.music.play(-1,0.0)
 	done = False
 	clock = pygame.time.Clock()
@@ -724,7 +724,7 @@ def lose_event(screen,image,image2):
 		pygame.display.flip()
 
 def intro(screen):
-	pygame.mixer.music.load("./assets/music/police_music.mp3")
+	pygame.mixer.music.load("./assets/music/police_music.ogg")
 	pygame.mixer.music.play(-1,0.0)
 	scene1 = pygame.image.load("./assets/scene1.png").convert_alpha()
 	scene2 = pygame.image.load("./assets/scene2.png").convert_alpha()
@@ -823,14 +823,14 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 ending_text = [["","",4],["cop","*gasp heh u are a quick one... kid *huff huff",5],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",4],["","MISSION ACCOMPLISHED",3]]
 ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8],[scene7,scene8],[scene9,scene9],[scene10,scene10]]
 
-title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/music/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
+title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/music/national_anthem.ogg",title,title_text1,titletext2)#song,background,image1, image2
 steal_donut(screen)
 intro(screen)
 result = running_game(screen)
 if result == True:
 	print("YOU WIN")
 	ending(screen,ending_text,ending_images)
-	title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets//music/MISSION_ACCOMPLISHED.mp3",scene10_grey,thanks,win)#song,background,image1, image2
+	title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets//music/MISSION_ACCOMPLISHED.ogg",scene10_grey,thanks,win)#song,background,image1, image2
 elif result == False:
 	print("LOSE")
 	lose_event(screen,lose, fail)
