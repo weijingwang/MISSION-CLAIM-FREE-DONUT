@@ -474,11 +474,11 @@ class story_game():
 
 		screen.blit(self.current_image,(0,0))
 		screen.blit(pygame.transform.scale(self.backTexture, (1280, 150)), (0, 570))
-		print(self.count_text,self.current_text,self.image)
+		# print(self.count_text,self.current_text,self.image)
 		screen.blit(self.txt_surface_S, (100, 580))#(1280/2)-self.txt_rect[2]/2
 		screen.blit(self.txt_surface, (50, 640))
 
-		print(self.time_text)
+		# print(self.time_text)
 
 
 		self.timer_text+=1
@@ -495,7 +495,7 @@ class story_game():
 		pygame.display.flip()
 
 	def update(self):
-		print(self.current_image)
+		# print(self.current_image)
 		self.index += 1
 		if self.index >= len(self.image):
 			self.index = 0
@@ -508,7 +508,7 @@ class story_game():
 			if (self.count_text+1) == len(self.text):
 				self.count_text = self.count_text
 				self.finished = True
-			print(self.finished)
+			# print(self.finished)
 			if self.finished == False:
 				self.count_text +=1
 				self.current_text = self.text[self.count_text]
@@ -642,13 +642,13 @@ def running_game(screen):
 
 
 		if player_meters_traveled >= 100:
-			print("win")
+			# print("win")
 			win = True
 			pygame.mixer.fadeout(1000)# does this work??????
 			return win	
 
 		if finish_game == True:
-			print("skipped")
+			# print("skipped")
 			done = True
 		# print(screen)
 		# print(collision)
@@ -698,14 +698,14 @@ def steal_donut(screen):
 
 		# print(finish_game)
 		if finish_game == True:
-			print("skipped")
+			# print("skipped")
 			done = True
 		clock.tick(30)
 
 		pygame.display.flip()
 
 def lose_event(screen,image,image2):
-	pygame.mixer.music.load("./assets/lose.mp3")
+	pygame.mixer.music.load("./assets/music/lose.mp3")
 	pygame.mixer.music.play(-1,0.0)
 	done = False
 	clock = pygame.time.Clock()
@@ -724,7 +724,7 @@ def lose_event(screen,image,image2):
 		pygame.display.flip()
 
 def intro(screen):
-	pygame.mixer.music.load("./assets/police_music.mp3")
+	pygame.mixer.music.load("./assets/music/police_music.mp3")
 	pygame.mixer.music.play(-1,0.0)
 	scene1 = pygame.image.load("./assets/scene1.png").convert_alpha()
 	scene2 = pygame.image.load("./assets/scene2.png").convert_alpha()
@@ -775,12 +775,6 @@ def displayText(surface,message,x,y,size,r,g,b):
 	myfont = pygame.font.Font(None,size)
 	textImage = myfont.render(message, True, (r,g,b))
 	surface.blit(textImage,(x,y))
-
-def open_mystery_file():
-	print("look at mystery_file.txt for help (cheats)")
-	f = open("mystery_file.txt", "w")
-	f.write("There is a secret code it will only appear here if you lose.\n\nSECRET: type skip to skip (cheat)")
-	f.close()
 		
 def ending(screen,words,images):
 	done = False
@@ -802,10 +796,6 @@ def ending(screen,words,images):
 		if game_done==True:
 			done = True
 
-
-
-
-
 screen = pygame.display.set_mode((1280, 720))
 
 title = pygame.image.load("./assets/title.png").convert_alpha()
@@ -822,6 +812,8 @@ scene8 = pygame.image.load("./assets/scene8.png").convert_alpha()
 scene9 = pygame.image.load("./assets/scene9.png").convert_alpha()
 scene10 = pygame.image.load("./assets/scene10.png").convert_alpha()
 scene10_grey = pygame.image.load("./assets/scene10_grey.png").convert_alpha()
+win = pygame.image.load("./assets/win.png").convert_alpha()
+thanks = pygame.image.load("./assets/thanks.png").convert_alpha()
 
 word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
 "smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
@@ -831,21 +823,16 @@ word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","p
 ending_text = [["","",4],["cop","*gasp heh u are a quick one... kid *huff huff",5],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",4],["","MISSION ACCOMPLISHED",5]]
 ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8],[scene7,scene8],[scene9,scene9],[scene10,scene10]]
 
-
-title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
+title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/music/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
 steal_donut(screen)
 intro(screen)
 result = running_game(screen)
 if result == True:
 	print("YOU WIN")
 	ending(screen,ending_text,ending_images)
-	title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/end_demo.mp3",scene10_grey,title_text1,titletext2)#song,background,image1, image2
+	title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets//music/MISSION_ACCOMPLISHED.mp3",scene10_grey,thanks,win)#song,background,image1, image2
 elif result == False:
 	print("LOSE")
-	open_mystery_file()
 	lose_event(screen,lose, fail)
-
-
-
 
 
