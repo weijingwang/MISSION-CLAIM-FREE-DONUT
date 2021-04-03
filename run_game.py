@@ -401,7 +401,7 @@ class police():
 			self.attack=False
 		else:
 			if collision==True:
-				self.rect[0]+=self.speed + 3
+				self.rect[0]+=self.speed + 2
 			if collision==False:
 				self.rect[0]+= self.speed
 		if self.rect[0]<0:
@@ -815,12 +815,12 @@ scene10_grey = pygame.image.load("./assets/scene10_grey.png").convert_alpha()
 win = pygame.image.load("./assets/win.png").convert_alpha()
 thanks = pygame.image.load("./assets/thanks.png").convert_alpha()
 
-word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","eat apple","peel banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
-"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","drive car","chase","money","gambling","kid",
-"i am dancing","goat","runner","prank","consume"
+word_list = ["pizza pie","hey guys","taco tuesday","samosa","scallion","boss","pov","mfw when","apple","banana","orange","grape","ringo","dog","bark","dance cat","pants","boil","eel",
+"smh my head","police","water","rojo","please","fast","donut","frog","baby","music","car","chase","money","gambling","kid",
+"dance","goat","runner","prank","consume"
 ]
 
-ending_text = [["","",4],["cop","*gasp heh u are a quick one... kid *huff huff",5],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",4],["","MISSION ACCOMPLISHED",5]]
+ending_text = [["","",4],["cop","*gasp heh u are a quick one... kid *huff huff",5],["kid","mmm this is one tasty donut",4],["kid","*aggressively munches on donut",3],["cop",".............",2],["kid","*wolfs down donut and scratches chin",4],["","MISSION ACCOMPLISHED",3]]
 ending_images = [[scene4,scene4],[scene5,scene5],[scene6,scene6],[scene7,scene8],[scene7,scene8],[scene9,scene9],[scene10,scene10]]
 
 title_screen(screen,1280,720,1280,5,0.1,2000,10,"./assets/music/national_anthem.mp3",title,title_text1,titletext2)#song,background,image1, image2
