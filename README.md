@@ -16,6 +16,6 @@ Every time you get a word right, the cop's position will be set back. This way, 
 
 pygame and python3
 
-### HOW TO RUN:
+## HOW TO RUN:
 
 ```python3 run_game.py```
